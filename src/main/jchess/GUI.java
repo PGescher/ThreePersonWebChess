@@ -23,12 +23,11 @@ package jchess;
 import java.awt.*;
 import java.net.*;
 import java.io.*;
-import java.io.InputStreamReader;
+
 import javax.swing.*;
 import javax.swing.JPanel;
-import java.io.IOException;
+
 import java.util.Properties;
-import java.io.FileOutputStream;
 import java.util.logging.Logger;
 
 /** Class representing the game interface which is seen by a player and
@@ -65,6 +64,7 @@ public class GUI
         try
         {
             String imageLink = "theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
+            //System.out.println("Testline");
             System.out.println(configFile.getProperty("THEME"));
             url = JChessApp.class.getResource(imageLink);
             img = tk.getImage(url);
@@ -101,10 +101,12 @@ public class GUI
     {
         Properties defConfFile = new Properties();
         Properties confFile = new Properties();
-        File outFile = new File(GUI.getJarPath() + File.separator + "config.txt");
+        File outFile = new File(GUI.getJarPath() + File.separator + "./config.txt");
         try
         {
-            defConfFile.load(GUI.class.getResourceAsStream("config.txt"));
+            InputStream is = GUI.class.getResourceAsStream("./config.txt");
+            defConfFile.load(is);
+            //System.out.println("Properties successfully loaded: "+defConfFile);
         }
         catch (java.io.IOException exc)
         {
@@ -115,19 +117,23 @@ public class GUI
         {
             try
             {
-                defConfFile.store(new FileOutputStream(outFile), null);
+                FileOutputStream os = new FileOutputStream(outFile);
+                defConfFile.store(os, null);
             }
             catch (java.io.IOException exc)
             {
             }
         }
         try
-        {   
-            confFile.load(new FileInputStream("config.txt"));
+        {  
+            InputStream is = GUI.class.getResourceAsStream("./config.txt"); 
+            confFile.load(is);
+            //confFile.load(new FileInputStream("./config.txt"));
         }
         catch (java.io.IOException exc)
         {
         }
+        //System.out.println("Returning Properties: "+confFile);
         return confFile;
     }
 }

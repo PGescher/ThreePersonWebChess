@@ -42,10 +42,14 @@ public class Chessboard extends JPanel
     public Square squares[][];//squares of chessboard
     private static final Image orgImage = GUI.loadImage("chessboard.png");//image of chessboard
     private static Image image = Chessboard.orgImage;//image of chessboard
+    
+    // This seems related to the task
     private static final Image org_sel_square = GUI.loadImage("sel_square.png");//image of highlited square
     private static Image sel_square = org_sel_square;//image of highlited square
     private static final Image org_able_square = GUI.loadImage("able_square.png");//image of square where piece can go
     private static Image able_square = org_able_square;//image of square where piece can go
+    
+    
     public Square activeSquare;
     private Image upDownLabel = null;
     private Image LeftRightLabel = null;
@@ -272,7 +276,7 @@ public class Chessboard extends JPanel
         //this.draw();//redraw
         System.out.println("active_x: " + this.active_x_square + " active_y: " + this.active_y_square);//4tests
         repaint();
-
+        //The circles dont appear yet
     }/*--endOf-select--*/
 
 
@@ -286,6 +290,7 @@ public class Chessboard extends JPanel
         this.activeSquare = null;
         //this.draw();//redraw
         repaint();
+        //The circles dont appear yet
     }/*--endOf-unselect--*/
     
     public int get_widht()
@@ -723,6 +728,7 @@ public class Chessboard extends JPanel
         }//--endOf--drawPiecesOnSquares
         if ((this.active_x_square != 0) && (this.active_y_square != 0)) //if some square is active
         {
+            //Click starts here
             g2d.drawImage(sel_square, 
                             ((this.active_x_square - 1) * (int) square_height) + topLeftPoint.x,
                             ((this.active_y_square - 1) * (int) square_height) + topLeftPoint.y, null);//draw image of selected square

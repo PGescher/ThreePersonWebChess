@@ -45,8 +45,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
     ThemeChooseWindow(Frame parent) throws Exception
     {
         super(parent);
-
-        File dir = new File(GUI.getJarPath() + File.separator + "theme"+File.separator);
+        File dir = new File(GUI.getJarPath() + File.separator +this.getClass().getPackageName()+ File.separator + "theme"+File.separator);
 
         System.out.println("Theme path: "+dir.getPath());
 
@@ -100,6 +99,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
         }
         else
         {
+            //Theme Error
             throw new Exception(Settings.lang("error_when_creating_theme_config_window"));
         }
 
