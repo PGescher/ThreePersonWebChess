@@ -1,2 +1,0 @@
-#Wed Oct 23 11:47:15 CEST 2024
-THEME=default

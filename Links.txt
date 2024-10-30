@@ -1,5 +1,0 @@
-
-https://search.maven.org/search?q=org.jdesktop
-
-appframeworker
-swing-worker
