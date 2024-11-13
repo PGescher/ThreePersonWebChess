@@ -25,7 +25,3 @@ VSCode: Ctrl+Shift+P: Create Branch from develop
 - Make a pull request from your branch to devel
     - Make sure you assign someone for the review
 
-
-
-
-
