@@ -25,17 +25,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
 
+import com.webapp.jchess.services.*;
+
 import java.awt.*;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.util.Calendar;
+import java.util.List;
 import java.awt.event.ComponentListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Game extends JPanel implements MouseListener, ComponentListener
+public class Game extends JPanel implements MouseListener, ComponentListener, IGameService
 {
 
     public Settings settings;
@@ -44,132 +47,31 @@ public class Game extends JPanel implements MouseListener, ComponentListener
     private Player activePlayer;
     public Moves moves;
 
-    Game()
-    {
-        this.setLayout(null);
-        this.moves = new Moves(this);
-        settings = new Settings();
-        chessboard = new Chessboard(this.settings, this.moves);
-        chessboard.setVisible(true);
-        chessboard.setSize(Chessboard.img_height, Chessboard.img_widht);
-        chessboard.addMouseListener(this);
-        chessboard.setLocation(new Point(0, 0));
-        this.add(chessboard);
+    //public Game()
+    //{
+        //this.setLayout(null);
+        //this.moves = new Moves(this);
+        //settings = new Settings();
+        //chessboard = new Chessboard(this.settings, this.moves);
+        //chessboard.setVisible(true);
+        //chessboard.setSize(Chessboard.img_height, Chessboard.img_widht);
+        //chessboard.addMouseListener(this);
+        //chessboard.setLocation(new Point(0, 0));
+        //this.add(chessboard);
         //this.chessboard.
 
-        JScrollPane movesHistory = this.moves.getScrollPane();
-        movesHistory.setSize(new Dimension(180, 350));
-        movesHistory.setLocation(new Point(500, 121));
-        this.add(movesHistory);
+        //JScrollPane movesHistory = this.moves.getScrollPane();
+        //movesHistory.setSize(new Dimension(180, 350));
+        //movesHistory.setLocation(new Point(500, 121));
+        //this.add(movesHistory);
 
-        this.blockedChessboard = false;
-        this.setLayout(null);
-        this.addComponentListener(this);
-        this.setDoubleBuffered(true);
-    }
+        //this.blockedChessboard = false;
+        //this.setLayout(null);
+        //this.addComponentListener(this);
+        //his.setDoubleBuffered(true);
+    //}
 
-    /** Method to save actual state of game
-     * @param path address of place where game will be saved
-     */
-    public void saveGame(File path)
-    {
-        File file = path;
-        FileWriter fileW = null;
-        try
-        {
-            fileW = new FileWriter(file);
-        }
-        catch (java.io.IOException exc)
-        {
-            System.err.println("error creating fileWriter: " + exc);
-            JOptionPane.showMessageDialog(this, Settings.lang("error_writing_to_file")+": " + exc);
-            return;
-        }
-        Calendar cal = Calendar.getInstance();
-        String str = new String("");
-        String info = new String("[Event \"Game\"]\n[Date \"" + cal.get(cal.YEAR) + "." + (cal.get(cal.MONTH) + 1) + "." + cal.get(cal.DAY_OF_MONTH) + "\"]\n"
-                + "[White \"" + this.settings.playerWhite.name + "\"]\n[Black \"" + this.settings.playerBlack.name + "\"]\n\n");
-        str += info;
-        str += this.moves.getMovesInString();
-        try
-        {
-            fileW.write(str);
-            fileW.flush();
-            fileW.close();
-        }
-        catch (java.io.IOException exc)
-        {
-            System.out.println("error writing to file: " + exc);
-            JOptionPane.showMessageDialog(this, Settings.lang("error_writing_to_file")+": " + exc);
-            return;
-        }
-        JOptionPane.showMessageDialog(this, Settings.lang("game_saved_properly"));
-    }
-
-    /** Loading game method(loading game state from the earlier saved file)
-     *  @param file File where is saved game
-     */
-
-    /*@Override
-    public void setSize(int width, int height) {
-    Dimension min = this.getMinimumSize();
-    if(min.getHeight() < height && min.getWidth() < width) {
-    super.setSize(width, height);
-    } else if(min.getHeight() < height) {
-    super.setSize(width, (int)min.getHeight());
-    } else if(min.getWidth() < width) {
-    super.setSize((int)min.getWidth(), height);
-    } else {
-    super.setSize(width, height);
-    }
-    }*/
-    static public void loadGame(File file)
-    {
-        FileReader fileR = null;
-        try
-        {
-            fileR = new FileReader(file);
-        }
-        catch (java.io.IOException exc)
-        {
-            System.out.println("Something wrong reading file: " + exc);
-            return;
-        }
-        BufferedReader br = new BufferedReader(fileR);
-        String tempStr = new String();
-        String blackName, whiteName;
-        try
-        {
-            tempStr = getLineWithVar(br, new String("[White"));
-            whiteName = getValue(tempStr);
-            tempStr = getLineWithVar(br, new String("[Black"));
-            blackName = getValue(tempStr);
-            tempStr = getLineWithVar(br, new String("1."));
-        }
-        catch (ReadGameError err)
-        {
-            System.out.println("Error reading file: " + err);
-            return;
-        }
-        /*
-        Game newGUI = JChessApp.jcv.addNewTab(whiteName + " vs. " + blackName);
-        Settings locSetts = newGUI.settings;
-        locSetts.playerBlack.name = blackName;
-        locSetts.playerWhite.name = whiteName;
-        locSetts.playerBlack.setType(Player.playerTypes.localUser);
-        locSetts.playerWhite.setType(Player.playerTypes.localUser);
-        locSetts.gameMode = Settings.gameModes.loadGame;
-        locSetts.gameType = Settings.gameTypes.local;
-
-        newGUI.newGame();
-        newGUI.blockedChessboard = true;
-        newGUI.moves.setMoves(tempStr);
-        newGUI.blockedChessboard = false;
-        newGUI.chessboard.repaint();
-        //newGUI.chessboard.draw();
-         */
-    }
-
+    
     /** Method checking in with of line there is an error
      *  @param  br BufferedReader class object to operate on
      *  @param  srcStr String class object with text which variable you want to get in file
@@ -231,32 +133,12 @@ public class Game extends JPanel implements MouseListener, ComponentListener
     /** Method to Start new game
      *
      */
+    /* 
     public void newGame()
     {
-        chessboard.setPieces("", settings.playerWhite, settings.playerBlack);
-
-        //System.out.println("new game, game type: "+settings.gameType.name());
-
-        activePlayer = settings.playerWhite;
-        if (activePlayer.playerType != Player.playerTypes.localUser)
-        {
-            this.blockedChessboard = true;
-        }
-        //dirty hacks starts over here :) 
-        //to fix rendering artefacts on first run
-        /*
-        Game activeGame = JChessApp.jcv.getActiveTabGame();
-        if( activeGame != null )//&& JChessApp.jcv.getNumberOfOpenedTabs() == 0 )
-        {
-            activeGame.chessboard.resizeChessboard(activeGame.chessboard.get_height(false));
-            activeGame.chessboard.repaint();
-            activeGame.repaint();
-        }
-             */
-        chessboard.repaint();
-        this.repaint();
-        //dirty hacks ends over here :)
+        return this;
     }
+        */
 
     /** Method to end game
      *  @param message what to show player(s) at end of the game (for example "draw", "black wins" etc.)
@@ -570,6 +452,60 @@ public class Game extends JPanel implements MouseListener, ComponentListener
 
     public void componentHidden(ComponentEvent e)
     {
+    }
+
+    @Override
+    public boolean initGame(int playerAmount) {
+        return true;
+    }
+
+    @Override
+    public String getGamestate() {
+        String example = """
+            {
+            "boards": {
+                "0": {
+                    "pieces": [
+                        ["R", "N", "B", "Q", "K", "B", "N", "R"],
+                        ["P", "P", "P", "P", "P", "P", "P", "P"],
+                        ["", "", "", "", "", "", "", ""],
+                        ["", "", "", "", "", "", "", ""]
+                    ]
+                },
+                "1": {
+                    "pieces": [
+                        ["R", "N", "B", "K", "Q", "B", "N", "R"],
+                        ["P", "P", "P", "P", "P", "P", "P", "P"],
+                        ["", "", "", "", "", "", "", ""],
+                        ["", "", "", "", "", "", "", ""]
+                    ]
+                },
+                "2": {
+                    "pieces": [
+                        ["R", "N", "B", "K", "Q", "B", "N", "R"],
+                        ["P", "P", "P", "P", "P", "P", "P", "P"],
+                        ["", "", "", "", "", "", "", ""],
+                        ["", "", "", "", "", "", "", ""]
+                    ]
+                }
+            }
+        }
+        """;
+
+        return example;
+    }
+
+
+    @Override
+    public List<String> getvaidMoves(String Square) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getvaidMoves'");
+    }
+
+    @Override
+    public boolean Move(String startSquare, String endSquare) {
+        // TODO Auto-generated method stub
+        return true;
     }
 }
 
