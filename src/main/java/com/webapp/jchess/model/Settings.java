@@ -1,3 +1,4 @@
+
 /*
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,7 +19,7 @@
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
  */
-package jchess;
+package com.webapp.jchess.model;
 
 import java.io.Serializable;
 import java.util.Locale;
@@ -33,8 +34,8 @@ public class Settings implements Serializable
 
     private static ResourceBundle loc = null;
     public int timeForGame;
-    // public boolean runningChat;
-    // public boolean runningGameClock;
+    public boolean runningChat;
+    public boolean runningGameClock;
     public boolean timeLimitSet;//tel us if player choose time 4 game or it's infinity
     public boolean upsideDown;
 

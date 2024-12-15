@@ -1,0 +1,3 @@
+In a typical backend-driven application, the term "model" is commonly used to refer to the classes that represent the core data structure or entities in your application. These classes are responsible for holding and organizing data, and they are often mapped to a database or used as the structure for API requests and responses.
+
+The model layer represents the data and business logic of your application.

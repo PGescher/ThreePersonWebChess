@@ -1,0 +1,61 @@
+/* Container for the player's chessboard */
+.player-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  /* The chessboard grid */
+  .chessboard {
+    display: grid;
+    grid-template-columns: repeat(8, 50px); /* 8 columns, each 50px wide */
+    grid-template-rows: repeat(4, 50px);   /* 8 rows, each 50px tall */
+    gap: 0; /* No gap between squares */
+    border: 2px solid #000; /* Optional border for the chessboard */
+    background-color: #000; /* Border area for contrast */
+  }
+  
+  /* Styling for individual squares */
+  .square {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    border: 2px,#111111;
+    outline: #c91818;
+    cursor: pointer;
+    /*transition: background-color 0.2s ease;*/
+  }
+  
+  /* Highlighted squares (valid moves) */
+  .highlighted {
+    background-color: yellow; /* Bright yellow for valid moves */
+    border: 2px solid #2c1f0c; /* Orange border for visibility */
+  }
+  
+  /* Add some hover effects for interactivity */
+  .square:hover {
+    background-color: #da1e1e; /* Slight hover effect for better interaction */
+  }
+  
+  /* Chessboard container alignment (optional) */
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  /* Title and player name styling */
+  h2 {
+    margin: 10px 0;
+    font-size: 1.5em;
+    text-align: center;
+    color: #333;
+  }
+  

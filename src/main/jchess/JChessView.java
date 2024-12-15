@@ -20,6 +20,13 @@ import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
+
+import jchess.gui_java.GUI;
+import jchess.gui_java.JChessAboutBox;
+import jchess.gui_java.NewGameWindow;
+import jchess.gui_java.PawnPromotionWindow;
+import jchess.gui_java.ThemeChooseWindow;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
@@ -241,7 +248,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
-        gamesPane = new jchess.JChessTabbedPane();
+        gamesPane = new jchess.gui_java.JChessTabbedPane();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         newGameItem = new javax.swing.JMenuItem();
@@ -435,12 +442,12 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
 
     private void moveBackItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveBackItemActionPerformed
     {//GEN-HEADEREND:event_moveBackItemActionPerformed
-        if( gui != null && gui.game != null )
-        {
-            gui.game.undo();
-        }
-        else
-        {
+        // if( gui != null && gui.game != null )
+        // {
+        //     gui.game.undo();
+        // }
+        // else
+        // {
             try 
             {
                 Game activeGame = this.getActiveTabGame();
@@ -457,7 +464,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
             {
                 JOptionPane.showMessageDialog(null , exc.getMessage());
             }
-        }
+        // }
 
     }//GEN-LAST:event_moveBackItemActionPerformed
 

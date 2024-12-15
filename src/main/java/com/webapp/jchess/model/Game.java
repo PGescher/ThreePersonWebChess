@@ -18,14 +18,12 @@
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
  */
-package jchess;
+package com.webapp.jchess.model;
 
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
-
-import jchess.figures.King;
 
 import java.awt.*;
 import java.io.File;
@@ -37,11 +35,6 @@ import java.awt.event.ComponentListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/** Class responsible for the starts of new games, loading games,
- * saving it, and for ending it.
- * This class is also responsible for appoing player with have
- * a move at the moment
- */
 public class Game extends JPanel implements MouseListener, ComponentListener
 {
 
@@ -49,10 +42,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
     public boolean blockedChessboard;
     public Chessboard chessboard;
     private Player activePlayer;
-    // public GameClock gameClock;
-    // public Client client;
     public Moves moves;
-    // public Chat chat;
 
     Game()
     {
@@ -66,20 +56,11 @@ public class Game extends JPanel implements MouseListener, ComponentListener
         chessboard.setLocation(new Point(0, 0));
         this.add(chessboard);
         //this.chessboard.
-        // gameClock = new GameClock(this);
-        // gameClock.setSize(new Dimension(200, 100));
-        // gameClock.setLocation(new Point(500, 0));
-        // this.add(gameClock);
 
         JScrollPane movesHistory = this.moves.getScrollPane();
         movesHistory.setSize(new Dimension(180, 350));
         movesHistory.setLocation(new Point(500, 121));
         this.add(movesHistory);
-
-        // this.chat = new Chat();
-        // this.chat.setSize(new Dimension(380, 100));
-        // this.chat.setLocation(new Point(0, 500));
-        // this.chat.setMinimumSize(new Dimension(400, 100));
 
         this.blockedChessboard = false;
         this.setLayout(null);
@@ -170,6 +151,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
             System.out.println("Error reading file: " + err);
             return;
         }
+        /*
         Game newGUI = JChessApp.jcv.addNewTab(whiteName + " vs. " + blackName);
         Settings locSetts = newGUI.settings;
         locSetts.playerBlack.name = blackName;
@@ -185,6 +167,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
         newGUI.blockedChessboard = false;
         newGUI.chessboard.repaint();
         //newGUI.chessboard.draw();
+         */
     }
 
     /** Method checking in with of line there is an error
@@ -250,7 +233,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
      */
     public void newGame()
     {
-        chessboard.setPieces("", settings.playerWhite, settings.playerBlack,chessboard);
+        chessboard.setPieces("", settings.playerWhite, settings.playerBlack);
 
         //System.out.println("new game, game type: "+settings.gameType.name());
 
@@ -261,6 +244,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
         }
         //dirty hacks starts over here :) 
         //to fix rendering artefacts on first run
+        /*
         Game activeGame = JChessApp.jcv.getActiveTabGame();
         if( activeGame != null )//&& JChessApp.jcv.getNumberOfOpenedTabs() == 0 )
         {
@@ -268,6 +252,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
             activeGame.chessboard.repaint();
             activeGame.repaint();
         }
+             */
         chessboard.repaint();
         this.repaint();
         //dirty hacks ends over here :)
@@ -296,7 +281,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
             activePlayer = settings.playerWhite;
         }
 
-        // this.gameClock.switch_clocks();
+        
     }
 
     /** Method of getting accualy active player
@@ -394,7 +379,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
         }
         else if( this.settings.gameType == Settings.gameTypes.network )
         {
-            // this.client.sendUndoAsk();
+            
             status = true;
         }
         return status;
@@ -504,11 +489,11 @@ public class Game extends JPanel implements MouseListener, ComponentListener
                         {
                             chessboard.move(chessboard.activeSquare, sq);
                         }
-                        // else if (settings.gameType == Settings.gameTypes.network)
-                        // {
-                        //     // client.sendMove(chessboard.activeSquare.pozX, chessboard.activeSquare.pozY, sq.pozX, sq.pozY);
-                        //     chessboard.move(chessboard.activeSquare, sq);
-                        // }
+                        else if (settings.gameType == Settings.gameTypes.network)
+                        {
+                            
+                            chessboard.move(chessboard.activeSquare, sq);
+                        }
 
                         chessboard.unselect();
 
@@ -573,12 +558,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener
         chess_height = this.chessboard.getHeight();
         this.moves.getScrollPane().setLocation(new Point(chess_height + 5, 100));
         this.moves.getScrollPane().setSize(this.moves.getScrollPane().getWidth(), chess_height - 100);
-        // this.gameClock.setLocation(new Point(chess_height + 5, 0));
-        // if (this.chat != null)
-        // {
-        //     this.chat.setLocation(new Point(0, chess_height + 5));
-        //     this.chat.setSize(new Dimension(chess_height, this.getHeight() - (chess_height + 5))); 
-        // }
     }
 
     public void componentMoved(ComponentEvent e)

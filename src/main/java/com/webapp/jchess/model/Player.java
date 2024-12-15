@@ -18,7 +18,7 @@
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
  */
-package jchess;
+package com.webapp.jchess.model;
 
 import java.io.Serializable;
 
@@ -29,14 +29,14 @@ import java.io.Serializable;
 public class Player implements Serializable
 {
 
-    public String name;
+    String name;
 
-    public enum colors
+    enum colors
     {
 
         white, black
     }
-    public colors color;
+    colors color;
 
     public enum playerTypes
     {
@@ -44,7 +44,7 @@ public class Player implements Serializable
         localUser, networkUser, computer
     }
     public playerTypes playerType;
-    public boolean goDown;
+    boolean goDown;
 
     public Player()
     {

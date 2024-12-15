@@ -18,9 +18,7 @@
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
  */
-package jchess;
-
-import jchess.figures.Piece;
+package com.webapp.jchess.model;
 
 /**
  * Class to represent a chessboard square
@@ -28,8 +26,8 @@ import jchess.figures.Piece;
 public class Square
 {
 
-    public int pozX; // 0-7, becouse 8 squares for row/column
-    public int pozY; // 0-7, becouse 8 squares for row/column
+    int pozX; // 0-7, becouse 8 squares for row/column
+    int pozY; // 0-7, becouse 8 squares for row/column
     public Piece piece = null;//object Piece on square (and extending Piecie)
 
     Square(int pozX, int pozY, Piece piece)

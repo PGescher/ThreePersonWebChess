@@ -16,10 +16,10 @@
 /*
  * Author: Mateusz Sławomir Lach ( matlak, msl )
  */
-package jchess;
+package com.webapp.jchess.model;
 
-import jchess.Moves.castling;
-import jchess.figures.Piece;
+import com.webapp.jchess.model.Moves.castling;
+import com.webapp.jchess.model.Chessboard;
 
 class Move
 {
