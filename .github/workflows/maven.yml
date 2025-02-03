@@ -5,9 +5,9 @@ permissions:
 
 on:
   push:
-    branches: [ "main", "develop", "Update-Frontend-with-new-Chessboard" ]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main", "develop", "Update-Frontend-with-new-Chessboard" ]
+    branches: [ "main", "develop" ]
 
 jobs:
   build_and_test_backend:
@@ -49,11 +49,26 @@ jobs:
           mkdir -p public
           cp -r backend/target/site/jacoco/* public/
 
-      # Step 7: List contents of public Folder
+      # Step 7: Install Doxygen and Generate Documentation
+      - name: Install Doxygen and Graphviz
+        run: sudo apt-get install -y doxygen graphviz
+
+      - name: Generate Doxygen Documentation
+        working-directory: backend/
+        run: |
+          doxygen Doxyfile
+
+      # Step 8: Move Doxygen HTML Output to Public Directory
+      - name: Prepare Doxygen Documentation for Deployment
+        run: |
+          mkdir -p public/doxygen
+          cp -r backend/doc/html/* public/doxygen/
+
+      # Step 9: List contents of public Folder
       - name: List public folder contents
         run: ls -R public/
 
-      # Step 8: Deploy Jacoco Report to GitHub Pages
+      # Step 10: Deploy Jacoco Report to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:

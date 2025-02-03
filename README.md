@@ -21,6 +21,16 @@ Full stack:
 
     docker-compose up
 
+# Test Coverage
+
+[JaCoCo Report](https://ovgutasks.github.io/ovgu_CCD/index.html)
+
+# Doxy Documentation
+
+[Doxy Documentation](https://ovgutasks.github.io/ovgu_CCD/doxygen/annotated.html)
+
+
+
 # Tools
 - VSCode
     - Git Graph 
