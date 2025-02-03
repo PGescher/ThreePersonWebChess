@@ -6,6 +6,16 @@ import com.webapp.jchess.model.AbstractGame;
 import com.webapp.jchess.model.Player;
 import com.webapp.jchess.model.gamestate.*;
 
+
+
+/** 
+ * Abstract Piece Class
+ * 
+ * - Provides the central interaface other backend logic interacts with
+ * - Uses the movement directions and special moves given by specific pieces to calculate their possible moves.
+ * 
+*/
+
 public abstract class Piece
 {
     static boolean debugOutput = false;

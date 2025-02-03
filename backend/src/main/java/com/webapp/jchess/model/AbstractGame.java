@@ -10,6 +10,21 @@ import com.webapp.jchess.model.moves.StandardMove;
 import com.webapp.jchess.model.pieces.King;
 import com.webapp.jchess.model.pieces.Piece;
 
+
+/** 
+ * Abstract Game Class
+ * 
+ * This class provides all the necessary game logic that is the same for all game types
+ * - starting games, 
+ * - making, undoing and redoing moves 
+ * - player logic 
+ * 
+ * Specific Games only have to complete a small set of functions after they have decided on their board game setup. <br>
+   - abstract public AbstractField getField(int []coords); <br>
+   - abstract public void endGame(String str); <br>
+   - abstract public boolean validCoordinates(int [] coords); <br>
+   - abstract public boolean isPromotionField(int[] coords);
+*/
 public abstract class AbstractGame {
     public static boolean debugOutput = false;
     

@@ -1,5 +1,0 @@
-- King currently cannot move out of chess
-- maybe add casteling again
-- maybe add pawn 2 square start and en passant again.
-- maybe remove Pawns ability to move backwards
-    - This could make moving between enemy boards impossible
