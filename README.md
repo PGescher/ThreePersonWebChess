@@ -1,3 +1,25 @@
+# Three Person Chess
+
+Java Springboot backend-driven React Webapp
+
+![grafik](https://github.com/user-attachments/assets/37ec9558-dfcc-49c9-83e7-b4760d559ac7)
+
+
+## Requirements
+
+## Run
+
+Backend only:
+
+    mvn spring-boot:run
+
+Frontend only:
+
+    npm start
+
+Full stack:
+
+    docker-compose up
 
 # Tools
 - VSCode
@@ -8,50 +30,6 @@
     - Maven for Java
     - IntelliCode
 - Node.js https://nodejs.org/dist/v22.11.0/node-v22.11.0-x64.msi
-
-#  Build
-mvn clean install
-mvnw package && java -jar target/springboot-0.0.1.jar
-
-# Docker Compose
-
-docker-compose build
-
-docker-compose up --build
-
-docker-compose ps
-
-docker-compose down
-
-# Docker
-
-Using Docker VSCode Extension
-
-## Backend
-
-F1 or strg+shift+p -> Docker Images: Build Image
-docker build --pull --rm -f "backend\Dockerfile" -t ovguccd:backend "backend"
-
-For specific Docker Version (ovguccd:backend):
-docker run -p 8080:8080 ovguccd::backend "backend"
-
-If latest Docker Version ovgucc:latest exists:
-docker run -p 8080:8080 backend
-
-## Frontend
-
-docker run -p 3000:3000 ovguccd:frontend
-
-## Stop Docker
-
-Running Containers:
-docker ps
-only ids:
-docker ps -q
-
-strg+shift+p -> Docker -> Stop -> select containers
-
-docker kill $(docker ps -q)
 
 # Branching Strategy
 

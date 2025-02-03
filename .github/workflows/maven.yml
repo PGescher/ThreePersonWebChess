@@ -1,10 +1,13 @@
 name: Java CI with Maven and Test Coverage with JaCoCo
 
+permissions:
+  contents: write
+
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main", "develop", "Update-Frontend-with-new-Chessboard" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "main", "develop", "Update-Frontend-with-new-Chessboard" ]
 
 jobs:
   build_and_test_backend:
@@ -27,7 +30,7 @@ jobs:
       - name: Build
         working-directory: backend/
         run: mvn -B package --file pom.xml
-
+    
       # Step 4 Test the Backend
       - name: Test
         working-directory: backend/
@@ -35,7 +38,26 @@ jobs:
 
       # Step 5: Upload JaCoCo Report
       - name: Upload JaCoCo report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
           path: backend/target/site/jacoco # Path to the HTML report directory
+          
+      # Step 6 Prepare Report
+      - name: Prepare JaCoCo Report for Deployment
+        run: |
+          mkdir -p public
+          cp -r backend/target/site/jacoco/* public/
+
+      # Step 7: List contents of public Folder
+      - name: List public folder contents
+        run: ls -R public/
+
+      # Step 8: Deploy Jacoco Report to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: public
+          clean: true  # Deletes old files before deploying
+          force: true  # Forces the push, avoiding locking issues

@@ -1,0 +1,180 @@
+.app-container {
+  position: relative;
+}
+
+/* Controls (Undo/Redo buttons) */
+.menu {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10; 
+}
+
+button {
+  padding: 8px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+  
+  .chessboard {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    /* Triangle Board */
+    .triangle-board {
+      position: relative;
+      z-index: 2;
+      align-items: center;
+      pointer-events: none; /* Prevent triangle-board container from blocking clicks */
+      margin-bottom: 0px; /* To bring the triangle board closer to square boards */
+      transform: translate(0px, 50px) rotate(0deg);
+    }
+    
+    /* Square Boards */
+    .square-board {
+      position: absolute;
+      width: 240px; /* Size of the square boards */
+      height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0px;
+      z-index: 1;
+    }
+    
+    .square-board-left {
+      transform: translate(-205px, 107px) rotate(-30deg);
+      transform-origin: center;
+    }
+    
+    .square-board-right {
+      transform: translate(233px, 108px) rotate(-150deg); /* Shifted right and rotated to connect */
+      transform-origin: center;
+    }
+    
+    .square-board-top {
+      transform: translate(15px, -269px) rotate(90deg); /* Positioned at the bottom */
+      transform-origin: center;
+    }
+    
+    .cell.triangle {
+      width: 0;
+      height: 0;
+      border-left: 28px solid transparent;
+      border-right: 28px solid transparent;
+      border-bottom: 50px solid #69923e;
+
+      cursor: pointer;
+      transition: border-color 0.3s;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* Clip to form a downward triangle */
+      margin-right: -28px;
+      margin-top: 0px;
+      pointer-events: auto; /* Allow clicking on square cells */
+      align-items: center;
+      text-align: center;
+      overflow: visible;
+      
+  }
+
+  .cell.triangle-flipped {
+      width: 0;
+      height: 0;
+      border-left: 28px solid transparent;
+      border-right: 28px solid transparent;
+      border-top: 50px solid  #ddd; /* Flipped triangle */
+
+      cursor: pointer;
+      transition: border-color 0.3s;
+      clip-path: polygon(50% 100%, 0% 0%, 100% 0%); /* Clip to form an upward triangle */
+      margin-right: -28px;
+      margin-top: 0px;
+      pointer-events: auto; /* Allow clicking on square cells */
+      align-items: center;
+      text-align: center;
+      overflow: visible;
+  }
+
+  .cell.triangle-flipped img {
+    border-radius: 0px;
+    z-index: 3;
+    transform: translate(-39px, -78px) rotate(0deg);
+    scale: 80%;
+  }
+
+  .cell.triangle img {
+    border-radius: 0px;
+    z-index: 4;
+    transform: translate(-45px, 8px) rotate(0deg);
+    scale: 80%;
+    margin-left: 5px;
+    margin-top: -5px;
+  }
+
+    /* Square Cells */
+  .cell.square.dark {
+      cursor:pointer;
+      width: 58px;
+      height: 58px;
+      display: flex;
+      transform: rotate(90deg);
+      justify-content: center;
+      align-items: center;
+      pointer-events: auto;
+      border: 0px solid #ffffff;
+      background-color: #69923e;
+    }
+
+      /* Square Cells */
+  .cell.square.light {
+    cursor:pointer;
+    width: 58px;
+    height: 58px;
+    display: flex;
+    transform: rotate(90deg);
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+    border: 0px solid #ffffff;
+    background-color: #ddd;
+  }
+    
+    /* Active State */
+    .cell.active.triangle {
+      border-bottom-color: #171f41;
+    }
+    
+    .cell.active.triangle-flipped {
+      border-top-color: #0732f0;
+    }
+
+    /* Possible Move State */
+    .cell.possible.triangle {
+      border-bottom-color: #c90c0c;
+    }
+    
+    .cell.possible.triangle-flipped {
+      border-top-color: #c90c0c;
+    }
+    
+    .cell.active.dark {
+      background-color: #4caf50;
+    }
+    .cell.possible.light {
+      background-color: #c90c0c;
+    }
+    .cell.active.light {
+      background-color: #4caf50;
+    }
+    .cell.possible.dark {
+      background-color: #c90c0c;
+    }
+    
