@@ -6,6 +6,8 @@ import java.util.Arrays;
 import com.webapp.jchess.model.AbstractGame;
 import com.webapp.jchess.model.Player;
 import com.webapp.jchess.model.gamestate.Square;
+import com.webapp.jchess.model.gamestate.squareVector;
+import com.webapp.jchess.model.gamestate.triangleVector;
 
 public class Pawn extends Piece
 {
@@ -16,28 +18,28 @@ public class Pawn extends Piece
 
         // this.movement = new PawnMovement();
         //Forward Movement - Strike left and right diagonal forward
-        this.movementOptions.add(new movementVector(0,1,1,movementVector.takeEnemyPiece.IMPOSSIBLE));
-        this.movementOptions.add(new movementVector(-1,1,1,movementVector.takeEnemyPiece.REQUIRED));
-        this.movementOptions.add(new movementVector(1,1,1,movementVector.takeEnemyPiece.REQUIRED));
+        this.movementOptions.add(new squareVector(0,1,1,squareVector.takeEnemyPiece.IMPOSSIBLE));
+        this.movementOptions.add(new squareVector(-1,1,1,squareVector.takeEnemyPiece.REQUIRED));
+        this.movementOptions.add(new squareVector(1,1,1,squareVector.takeEnemyPiece.REQUIRED));
 
         //Backward Movement - Strike left and right diagonal backwards
-        this.movementOptions.add(new movementVector(0,-1,1,movementVector.takeEnemyPiece.IMPOSSIBLE));
-        this.movementOptions.add(new movementVector(-1,-1,1,movementVector.takeEnemyPiece.REQUIRED));
-        this.movementOptions.add(new movementVector(1,-1,1,movementVector.takeEnemyPiece.REQUIRED));
+        this.movementOptions.add(new squareVector(0,-1,1,squareVector.takeEnemyPiece.IMPOSSIBLE));
+        this.movementOptions.add(new squareVector(-1,-1,1,squareVector.takeEnemyPiece.REQUIRED));
+        this.movementOptions.add(new squareVector(1,-1,1,squareVector.takeEnemyPiece.REQUIRED));
 
         /*
          * Triangle Movement -  Movement across the Edges, Striking along Corners - Depending on Orientation they are either added or subtracted
          */
 
         //X-Axis
-        this.movementOptions.add(new movementVector(1,0,0,1,movementVector.takeEnemyPiece.IMPOSSIBLE));
-        this.movementOptions.add(new movementVector(-1, 1, 1, 1, movementVector.takeEnemyPiece.REQUIRED));
+        this.movementOptions.add(new triangleVector(1,0,0,-1,0,0,1,squareVector.takeEnemyPiece.IMPOSSIBLE));
+        // this.movementOptions.add(new triangleVector(-1, 1, 1, 1, squareVector.takeEnemyPiece.REQUIRED));
         //Y-Axis
-        this.movementOptions.add(new movementVector(0,1,0,1,movementVector.takeEnemyPiece.IMPOSSIBLE));
-        this.movementOptions.add(new movementVector(1, -1, 1, 1, movementVector.takeEnemyPiece.REQUIRED));
+        this.movementOptions.add(new triangleVector(0,1,0,0,-1,0,1,squareVector.takeEnemyPiece.IMPOSSIBLE));
+        // this.movementOptions.add(new triangleVector(1, -1, 1, 1, squareVector.takeEnemyPiece.REQUIRED));
         //Z-Axis
-        this.movementOptions.add(new movementVector(0,0,1,1,movementVector.takeEnemyPiece.IMPOSSIBLE));
-        this.movementOptions.add(new movementVector(1, 1, -1, 1, movementVector.takeEnemyPiece.REQUIRED));
+        this.movementOptions.add(new triangleVector(0,0,1,0,0,-1,1,squareVector.takeEnemyPiece.IMPOSSIBLE));
+        // this.movementOptions.add(new triangleVector(1, 1, -1, 1, squareVector.takeEnemyPiece.REQUIRED));
 
 
 
@@ -53,7 +55,7 @@ public class Pawn extends Piece
     
     /*
     @Override
-    public void specialMoves(ArrayList<Square> validMoves){
+    public void specialMoves(ArrayList<AbstractField> validMoves){
         if(!(this.field instanceof Square)) return;
         Square curPos = (Square) this.field;
         if(!this.wasMoved){

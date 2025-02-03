@@ -2,6 +2,7 @@ package com.webapp.jchess.model.pieces;
 
 import com.webapp.jchess.model.AbstractGame;
 import com.webapp.jchess.model.Player;
+import com.webapp.jchess.model.gamestate.squareVector;
 
 public class Knight extends Piece
 {
@@ -11,14 +12,14 @@ public class Knight extends Piece
         super(game, player,Piece.typesOfPieces.Knight);//call initializer of super type: Piece
         this.symbol = "N";
 
-        this.movementOptions.add(new movementVector(2,1,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(2,-1,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(-2,1,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(-2,-1,1,movementVector.takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(2,1,1,squareVector.takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(2,-1,1,squareVector.takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(-2,1,1,squareVector.takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(-2,-1,1,squareVector.takeEnemyPiece.POSSIBLE));
 
-        this.movementOptions.add(new movementVector(1,2,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(1,-2,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(-1,2,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(-1,-2,1,movementVector.takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(1,2,1,squareVector.takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(1,-2,1,squareVector.takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(-1,2,1,squareVector.takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(-1,-2,1,squareVector.takeEnemyPiece.POSSIBLE));
     }
 }

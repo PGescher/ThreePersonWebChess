@@ -11,6 +11,8 @@ import com.webapp.jchess.model.pieces.King;
 import com.webapp.jchess.model.pieces.Piece;
 
 public abstract class AbstractGame {
+    public static boolean debugOutput = false;
+    
     public ArrayList<Player> allPlayers;
     private int activePlayerIdx = 0;
 
@@ -82,7 +84,10 @@ public abstract class AbstractGame {
         //0-2 Square, 3 Triangle
         if(!validCoordinates(globalCoords)){return 0;}
         AbstractField field = getField(globalCoords);
-        if(field==null){return 0;} //No Square at coords
+        if(field==null){
+            System.out.print(("ERROR: no field at coords"));
+            System.out.println(globalCoords);
+            return 0;} //No Square at coords
         
         if(!pieceIsSelected()){ //We havent selected a piece yet
             //Selected field doesnt contain a piece

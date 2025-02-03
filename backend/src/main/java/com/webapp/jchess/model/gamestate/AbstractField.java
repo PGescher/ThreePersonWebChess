@@ -27,5 +27,7 @@ public abstract class AbstractField {
         this.piece.field = this;
     }
 
+    public abstract int[] addVec(abstractVector vec);
+
     public abstract AbstractBoard getBoard();
 }

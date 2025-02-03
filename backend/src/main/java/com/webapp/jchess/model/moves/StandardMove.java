@@ -2,7 +2,6 @@ package com.webapp.jchess.model.moves;
 
 import com.webapp.jchess.model.AbstractGame;
 import com.webapp.jchess.model.gamestate.AbstractField;
-import com.webapp.jchess.model.gamestate.Square;
 import com.webapp.jchess.model.pieces.Pawn;
 import com.webapp.jchess.model.pieces.Piece;
 import com.webapp.jchess.model.pieces.Queen;

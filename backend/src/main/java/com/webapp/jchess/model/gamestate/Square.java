@@ -28,4 +28,16 @@ public class Square extends AbstractField
     public SquareBoard getBoard() {
         return (SquareBoard)board;
     }
+
+    @Override
+    public int[] addVec(abstractVector vec){
+        if(!(vec instanceof squareVector))return null;
+        squareVector sqVec = (squareVector)vec;
+        int[] retCoords = new int[]{
+            this.getGlobalCoords()[0],
+            this.getGlobalCoords()[1]+sqVec.movementVector_X,
+            this.getGlobalCoords()[2]+sqVec.movementVector_Y};
+
+        return retCoords;
+    }
 }

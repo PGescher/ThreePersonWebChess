@@ -1,4 +1,0 @@
-- valid moves als Hashmap zurück, nur einmal berechnen
-- movementLogik überarbeiten
-    - Sprung zwischen Boards
-    - Bewegung auf den Dreiecksfeldern

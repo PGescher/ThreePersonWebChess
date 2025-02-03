@@ -2,8 +2,8 @@ package com.webapp.jchess.model.pieces;
 
 import com.webapp.jchess.model.AbstractGame;
 import com.webapp.jchess.model.Player;
-import com.webapp.jchess.model.gamestate.Square;
-import com.webapp.jchess.model.gamestate.AbstractField;
+import com.webapp.jchess.model.gamestate.*;
+import com.webapp.jchess.model.gamestate.abstractVector.takeEnemyPiece;
 
 import java.util.ArrayList;
 
@@ -17,15 +17,41 @@ public class King extends Piece
         super(game, player, Piece.typesOfPieces.King);
         this.symbol="K";
         
-        this.movementOptions.add(new movementVector(1,1,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(1,-1,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(-1,1,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(-1,-1,1,movementVector.takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(1,1,1,takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(1,-1,1,takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(-1,1,1,takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(-1,-1,1,takeEnemyPiece.POSSIBLE));
 
-        this.movementOptions.add(new movementVector(1,0,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(-1,0,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(0,1,1,movementVector.takeEnemyPiece.POSSIBLE));
-        this.movementOptions.add(new movementVector(0,-1,1,movementVector.takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(1,0,1,takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(-1,0,1,takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(0,1,1,takeEnemyPiece.POSSIBLE));
+        this.movementOptions.add(new squareVector(0,-1,1,takeEnemyPiece.POSSIBLE));
+
+        //Triangle horizontal and vertical
+        triangleVector triVec = new triangleVector(0,0,1,-1,0,0,1,takeEnemyPiece.POSSIBLE);
+        this.movementOptions.add(triVec);
+        this.movementOptions.add(triVec.invert());
+
+        triVec = new triangleVector(0,1,0,-1,0,0,1,takeEnemyPiece.POSSIBLE);
+        this.movementOptions.add(triVec);
+        this.movementOptions.add(triVec.invert());
+
+        triVec = new triangleVector(0,1,0,0,0,-1,1,takeEnemyPiece.POSSIBLE);
+        this.movementOptions.add(triVec);
+        this.movementOptions.add(triVec.invert());
+
+        //Triangle diagonal
+        triVec = new triangleVector(-1,1,1,-1,0,0,15,takeEnemyPiece.POSSIBLE);
+        this.movementOptions.add(triVec);
+        this.movementOptions.add(triVec.invert());
+
+        triVec = new triangleVector(0,0,1,1,1,0,15,takeEnemyPiece.POSSIBLE);
+        this.movementOptions.add(triVec);
+        this.movementOptions.add(triVec.invert());
+
+        triVec = new triangleVector(0,1,0,-1,1,-1,15,takeEnemyPiece.POSSIBLE);
+        this.movementOptions.add(triVec);
+        this.movementOptions.add(triVec.invert());
     }
 
     //Is the King at its current position threatened by an enemy piece?
@@ -91,7 +117,7 @@ public class King extends Piece
 
     /*
     @Override
-    public void specialMoves(ArrayList<Square> validMoves){
+    public void specialMoves(ArrayList<AbstractField> validMoves){
         if(this.wasMoved)return;
 
         int shortX = this.field.coords[0]+3;
