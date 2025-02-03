@@ -11,6 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.webapp.jchess.model.gamestate.SquareBoard;
 import com.webapp.jchess.model.gamestate.TriangleBoard;
+import com.webapp.jchess.model.pieces.Bishop;
+import com.webapp.jchess.model.pieces.Knight;
+import com.webapp.jchess.model.pieces.Pawn;
+import com.webapp.jchess.model.pieces.Piece;
+import com.webapp.jchess.model.pieces.Queen;
+import com.webapp.jchess.model.pieces.Rook;
 import com.webapp.jchess.model.AbstractGame;
 import com.webapp.jchess.model.Game_threePlayerGame;
 import com.webapp.jchess.model.Game_twoPlayers;
@@ -81,6 +87,37 @@ public class GameService {
     public int selectField(int[] coords) {
         System.out.println("Received coordinates in GameService: " + Arrays.toString(coords));
         return game.selectField(coords);
+    }
+
+    /*
+     * Selected a PromotionField
+     */
+    public int selectPromotionField(int[] coords, int promotionPiece) {
+
+        Piece tobePromotedTo;
+
+        switch (promotionPiece) {
+            case 1:
+                //Queen
+                tobePromotedTo = new Queen(game, game.getActivePlayer());
+                break;
+            case 2:
+                //Rook
+                tobePromotedTo = new Rook(game, game.getActivePlayer());
+                break;
+            case 3:
+                //Bishop
+                tobePromotedTo = new Bishop(game, game.getActivePlayer());
+                break;
+            case 4:
+                //Knight
+                tobePromotedTo = new Knight(game, game.getActivePlayer());
+                break;
+            default:
+                tobePromotedTo = new Pawn(game, game.getActivePlayer());
+        }
+
+        return game.selectField(coords, tobePromotedTo);
     }
 
     /*

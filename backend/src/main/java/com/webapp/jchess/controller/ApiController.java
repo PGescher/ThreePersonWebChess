@@ -30,22 +30,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin(origins = "http://localhost:3000")
 public class ApiController {
 
-    private static final int[][][] TriangleBoardMap = {
-    {{7, 0, 7}},
-    {{7, 1, 6}, {7, 1, 7}, {6, 1, 7}},
-    {{7, 2, 5}, {7, 2, 6}, {6, 2, 6}, {6, 2, 7}, {5, 2, 7}},
-    {{7, 3, 4}, {7, 3, 5}, {6, 3, 5}, {6, 3, 6}, {5, 3, 6}, {5, 3, 7}, {4, 3, 7}},
-    {{7, 4, 3}, {7, 4, 4}, {6, 4, 4}, {6, 4, 5}, {5, 4, 5}, {5, 4, 6}, {4, 4, 6}, {4, 4, 7}, {3, 4, 7}},
-    {},
-    {},
-    {}
-    };
-
     private GameService gameService;
 
-    /*
-     * Start the Game with amount of Players
-     */
     /*
      * Check if active Game
      */
@@ -172,6 +158,39 @@ public class ApiController {
             case(0): return ResponseEntity.ok().body("{\"code\": 0, \"message\": \"Selected Field does not contain a Piece or Enemy Piece\"}");
             case(1): return ResponseEntity.ok().body("{\"code\": 1, \"message\": \"Field selection successful\"}");//Successfully passed the selected Field.
             case(2): return ResponseEntity.ok().body("{\"code\": 2, \"message\": \"Move has been made\"}");//Move has been Made.
+            case(3): return ResponseEntity.ok().body("{\"code\": 3, \"message\": \"Promotion Field\"}");//Move has been Made.
+            default: return ResponseEntity.badRequest().body("{\"code\": -1, \"message\": \"Game selectField returned an unknown code\"}");
+          }
+        } catch (Exception e) {
+            // Handle any exceptions that may arise
+            return ResponseEntity.status(500).body("{\"code\": 500, \"message\": \"An error occurred while processing the field.\", \"error\": \"" + e.getMessage() + "\"}");
+        }
+    }
+
+    
+    /*
+     * Selected a Square
+     */
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+    @PostMapping("/select-PromotionField")
+    public ResponseEntity<String> selectPromotionField(@RequestBody int[] coordsAndPieceCode) {
+        // Debugging: print the coordinates to verify
+        System.out.println("Received coordinates and Piece Code in Controller: " + Arrays.toString(coordsAndPieceCode));
+
+        int pieceCode = coordsAndPieceCode[coordsAndPieceCode.length-1];
+        int[] coords = Arrays.copyOfRange(coordsAndPieceCode, 0, coordsAndPieceCode.length-1);
+
+        // Assuming your game service has a method to calculate possible moves based on the field coordinates
+        try {
+          // Call the game service (or whatever logic you need) to fetch the possible moves
+          int responsecode = gameService.selectPromotionField(coords, pieceCode);
+          System.out.println("Return Code: " + responsecode);
+          switch(responsecode){
+            case(-1): return ResponseEntity.badRequest().body("{\"code\": 0, \"message\": \"No code in game.selectField was executed!\"}");
+            case(0): return ResponseEntity.ok().body("{\"code\": 0, \"message\": \"Selected Field does not contain a Piece or Enemy Piece\"}");
+            case(1): return ResponseEntity.ok().body("{\"code\": 1, \"message\": \"Field selection successful\"}");//Successfully passed the selected Field.
+            case(2): return ResponseEntity.ok().body("{\"code\": 2, \"message\": \"Move has been made\"}");//Move has been Made.
+            case(3): return ResponseEntity.ok().body("{\"code\": 3, \"message\": \"Promotion Field\"}");//Move has been Made.
             default: return ResponseEntity.badRequest().body("{\"code\": -1, \"message\": \"Game selectField returned an unknown code\"}");
           }
         } catch (Exception e) {

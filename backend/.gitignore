@@ -7,3 +7,10 @@ target/test-classes
 target/surefire-reports
 target/site/jacoco
 target/jacoco.exec
+target/pmd.xml
+target/pmd
+target/reports/css
+target/reports/fonts
+target/reports/images
+target/reports/img
+target/reports/js

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Chessboard from "./components/Chessboard";
+import SelectionPrompt from "./components/selectionPrompt";
+
 import "./App.css";
 
 const App = () => {
@@ -13,6 +15,9 @@ const App = () => {
   const [pieces, setPieces] = useState([]);
   // Holds coordinates for highlighted fields
   const [highlightedFields, setHighlightedFields] = useState([]);
+
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [fieldCoords, setFieldCoords] = useState([]);
 
   // Fetch initial piece locations when the app loads
   useEffect(() => {
@@ -117,6 +122,11 @@ const App = () => {
         if(data.code === 1) {
           // Field was selected
           await Promise.all([getPieces(), getHighlightedFields()]);
+        } else if (data.code === 3) {
+          setFieldCoords([boardid, ...fieldCoords]);
+          setShowPrompt(true);
+          console.log("Data was 3, showing Promotion Prompt")
+          console.log(`Set ShowPompt to ${showPrompt}`)
         }
       //getPieces();
       //getHighlightedFields();
@@ -129,6 +139,29 @@ const App = () => {
       }
     } catch (error) {
       console.error("Error fetching possible moves:", error);
+    }
+  };
+
+  // Handle user selection from the prompt
+  const handleUserSelection = async (selectedOption) => {
+    console.log("Handling User Selection, closing prompt..")
+    setShowPrompt(false);
+    const dataToSend = [...fieldCoords, selectedOption];
+    try {
+      const response = await fetch("http://localhost:8080/api/select-PromotionField", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+      await getPieces();
+      setHighlightedFields([]);
+    } catch (error) {
+      console.error("Error handling user selection:", error);
     }
   };
 
@@ -184,16 +217,10 @@ const App = () => {
       }
     };
 
-    /*
-    const togglePlayer = (toggle) => {
-      setActivePlayerIndex((activePlayerIndex) => (activePlayerIndex + toggle) % players.length);
-    };
-    const [activePlayerIndex, setActivePlayerIndex] = useState(0);
-  */
-  // Rendering return
-  if (gameStatus === 0) {
-    return (
-      <div className="board-container">
+  return (
+    <div className="board-container">
+      {gameStatus === 0 ? (
+        <div className="board-container">
         <h1>Start a New Chess Game</h1>
         {players.map((player) => (
           <div key={player.id} style={{ marginBottom: "10px" }}>
@@ -215,10 +242,7 @@ const App = () => {
         </button>
         <p>{message}</p>
       </div>
-    );
-  } else {
-    return (
-      <div className="board-container">
+      ) : (
         <Chessboard
           pieces={pieces}
           highlightedFields={highlightedFields}
@@ -228,9 +252,22 @@ const App = () => {
           handleRestart={startNewGame}
           //activePlayerIndex={activePlayerIndex}
         />
-      </div>
-    );
-  }
+      )}
+
+      {showPrompt && (
+        <div className="promotion-dialog">
+          <p>Choose a piece for promotion:</p>
+          <div className="promotion-options">
+            {["Queen", "Rook", "Bishop", "Knight"].map((piece, index) => (
+              <button key={index} onClick={() => handleUserSelection(index + 1)}>
+                <img src={`/images/${piece}PID1.png`} alt={piece} />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default App;

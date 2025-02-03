@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Stack;
 
 import com.webapp.jchess.model.gamestate.AbstractField;
+import com.webapp.jchess.model.gamestate.SquareBoard;
 import com.webapp.jchess.model.moves.AbstractMove;
 import com.webapp.jchess.model.moves.StandardMove;
 import com.webapp.jchess.model.pieces.King;
@@ -55,7 +56,7 @@ public abstract class AbstractGame {
     abstract public AbstractField getField(int []coords);
     abstract public void endGame(String str);
     abstract public boolean validCoordinates(int [] coords);
-    abstract public boolean isPromotionField(int[] coords);
+    abstract public boolean isPromotionField(int[] globalCoords);
 
     public boolean pieceIsSelected(){
         return selectedPiece != null;
@@ -93,8 +94,13 @@ public abstract class AbstractGame {
     public AbstractMove move(AbstractMove move){
         return this.move(move,true);
     }
-
+    
     public int selectField(int[] globalCoords){
+
+        return selectField(globalCoords, null);
+    }
+
+    public int selectField(int[] globalCoords, Piece tobePromotedTo){
         //{id, x, y} or {id, x, y, z}
         //0-2 Square, 3 Triangle
         if(!validCoordinates(globalCoords)){return 0;}
@@ -117,10 +123,19 @@ public abstract class AbstractGame {
             }
         }else{  //A piece has been previously selected
             //If the field is among our valid moves
-            
             if(selectedPiece.validMoves().indexOf(field)!=-1){
+                if((tobePromotedTo == null) && (isPromotionField(globalCoords))) {return 3;} //Is a promotion field redo and request more info from User.
+                System.out.println("Not a PromotionField");
                 StandardMove stMove = new StandardMove(selectedPiece, field);
+                if(tobePromotedTo != null){
+                    stMove.setPromotionPiece(tobePromotedTo);
+                }
+                else{
+                    System.out.println("Piece Code is not 1-4");
+                }
+                
                 move(stMove);
+                
                 selectedPiece=null;
 
                 //switch player
@@ -191,11 +206,12 @@ public abstract class AbstractGame {
         return move;
     }
 
-    ///////////////////////////////////////////////////////////////
-    /// // Private methods
-    private Player getActivePlayer(){
+    public Player getActivePlayer(){
         return allPlayers.get(activePlayerIdx);
     }
+
+    ///////////////////////////////////////////////////////////////
+    /// // Private methods
 
     private void switchActivePlayer()
     {
@@ -227,7 +243,4 @@ public abstract class AbstractGame {
         }
         return move;
     }
-
-    
-
 }

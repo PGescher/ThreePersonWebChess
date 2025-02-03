@@ -21,7 +21,7 @@ public abstract class AbstractField {
         return localCoords;
     }
 
-    void setPiece(Piece piece)
+    public void setPiece(Piece piece)
     {
         this.piece = piece;
         this.piece.field = this;

@@ -44,7 +44,7 @@ public class TriangleBoard extends AbstractBoard{
         game.activePieces.add(this.triangles.get(index).piece);
     }
 
-    public Triangle getTriangle(int[] localCoords){
+    public Triangle getField(int[] localCoords){
         if(!validCoordinates(localCoords)) return null;
 
         return getTriangle(localCoords[0],localCoords[1],localCoords[2]);

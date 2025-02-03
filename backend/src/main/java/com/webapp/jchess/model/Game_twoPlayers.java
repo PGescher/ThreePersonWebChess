@@ -43,7 +43,7 @@ public class Game_twoPlayers extends AbstractGame
     @Override
     public AbstractField getField(int []globalCoords){
         int[] localCoords = Arrays.copyOfRange(globalCoords, 1, globalCoords.length);
-        return squareBoard.getSquare(localCoords);
+        return squareBoard.getField(localCoords);
     }
     
 

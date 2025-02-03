@@ -13,4 +13,6 @@ public abstract class AbstractBoard {
     }
 
     abstract public boolean validCoordinates(int[] localCoords);
+
+    abstract public AbstractField getField(int[] localCoords);
 }

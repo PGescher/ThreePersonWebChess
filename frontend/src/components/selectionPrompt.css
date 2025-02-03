@@ -1,0 +1,30 @@
+.promotion-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    text-align: center;
+  }
+  
+  .promotion-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .promotion-options button {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .promotion-options img {
+    width: 50px;
+    height: 50px;
+  }
+  

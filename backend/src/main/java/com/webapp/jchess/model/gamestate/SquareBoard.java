@@ -35,7 +35,7 @@ public class SquareBoard extends AbstractBoard{
         this.dimY = dim_y;
     }
 
-    public Square getSquare(int[] localCoords){
+    public Square getField(int[] localCoords){
         if(!validCoordinates(localCoords)) return null;
         return squares[localCoords[0]][localCoords[1]];
     }

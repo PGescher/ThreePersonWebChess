@@ -42,7 +42,7 @@ public class StandardMove extends AbstractMove{
             AbstractGame board = movedPiece.game;
             board.removePiece(this.movedPiece);
 
-            this.promotedPiece = new Queen(movedPiece.game, movedPiece.player);
+            //this.promotedPiece = new Queen(movedPiece.game, movedPiece.player);
 
             this.to.piece = this.promotedPiece;
             this.promotedPiece.field = this.to;
@@ -95,6 +95,10 @@ public class StandardMove extends AbstractMove{
             
         
         return locMove;
+    }
+
+    public void setPromotionPiece(Piece toBePromotedTo) {
+        this.promotedPiece = toBePromotedTo;
     }
     
 }
