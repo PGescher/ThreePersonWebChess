@@ -21,10 +21,10 @@ public class Game_twoPlayers extends AbstractGame
         squareBoard = new SquareBoard(0, 8, 8, this);
         squareBoard.addPromotionRow(0);
         squareBoard.addPromotionRow(7);
-        squareBoard.setFigures4NewGame(0, this.allPlayers.get(1));
-        squareBoard.createPawnRow(1, this.allPlayers.get(1));
-        squareBoard.setFigures4NewGame(7, this.allPlayers.get(0));
-        squareBoard.createPawnRow(6, this.allPlayers.get(0));
+        squareBoard.setFigures4NewGame(0, this.activePlayers.get(1));
+        squareBoard.createPawnRow(1, this.activePlayers.get(1));
+        squareBoard.setFigures4NewGame(7, this.activePlayers.get(0));
+        squareBoard.createPawnRow(6, this.activePlayers.get(0));
         // this.moveHistoryDisplay = new Move_History(this);
     }
 

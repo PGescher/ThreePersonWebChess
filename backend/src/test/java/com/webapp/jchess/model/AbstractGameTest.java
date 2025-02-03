@@ -32,7 +32,7 @@ public class AbstractGameTest {
      */
     @Test
     public void AbtractGame_forThreePlayers(){
-        assertEquals(3, game.allPlayers.size());
+        assertEquals(3, game.activePlayers.size());
     }
 
     /*
@@ -49,7 +49,7 @@ public class AbstractGameTest {
         
         game.removePiece(mockPiece);
         
-        assertNull(mockPiece.field, "Piece field should be null after removal.");
+        assertNull(mockField.piece, "Field piece should be null after removal.");
         assertFalse(game.activePieces.contains(mockPiece), "Piece should be removed from activePieces.");
     }
 

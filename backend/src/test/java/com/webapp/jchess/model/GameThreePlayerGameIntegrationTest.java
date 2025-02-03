@@ -55,33 +55,33 @@ class GameThreePlayerGameIntegrationTest {
         AbstractBoard[] boards = game.boards;
 
         //White Pawn to Test Movement into and out of Triangleboard
-        Pawn pawnWhite0 = new Pawn(game, game.allPlayers.get(0));
+        Pawn pawnWhite0 = new Pawn(game, game.activePlayers.get(0));
         boards[0].getField(new int[] {1, 2}).setPiece(pawnWhite0);
         game.activePieces.add(pawnWhite0);
 
         //Rook, Bishop, Knight and Queen to test movement over Triangleboard
-        Rook rookWhite1 = new Rook(game, game.allPlayers.get(0));
+        Rook rookWhite1 = new Rook(game, game.activePlayers.get(0));
         boards[0].getField(new int[] {5, 3}).setPiece(rookWhite1);
         game.activePieces.add(rookWhite1);
 
-        Bishop bishopWhite2 = new Bishop(game, game.allPlayers.get(0));
+        Bishop bishopWhite2 = new Bishop(game, game.activePlayers.get(0));
         boards[0].getField(new int[] {7, 3}).setPiece(bishopWhite2);
         game.activePieces.add(bishopWhite2);
 
-        Knight knightWhite3 = new Knight(game, game.allPlayers.get(0));
+        Knight knightWhite3 = new Knight(game, game.activePlayers.get(0));
         boards[0].getField(new int[] {0,3}).setPiece(knightWhite3);
         game.activePieces.add(knightWhite3);
 
-        Queen queenWhite4 = new Queen(game, game.allPlayers.get(0));
+        Queen queenWhite4 = new Queen(game, game.activePlayers.get(0));
         boards[0].getField(new int[] {4, 2}).setPiece(queenWhite4);
         game.activePieces.add(queenWhite4);
 
         //Black Pawn to be taken
-        Pawn pawnBlack5 = new Pawn(game, game.allPlayers.get(1));
+        Pawn pawnBlack5 = new Pawn(game, game.activePlayers.get(1));
         boards[1].getField(new int[] {4,3}).setPiece(pawnBlack5);
         game.activePieces.add(pawnBlack5);
 
-        Pawn pawnBlack6 = new Pawn(game, game.allPlayers.get(1));
+        Pawn pawnBlack6 = new Pawn(game, game.activePlayers.get(1));
         boards[1].getField(new int[] {7,3}).setPiece(pawnBlack6);
         game.activePieces.add(pawnBlack6);
     }
@@ -95,10 +95,10 @@ class GameThreePlayerGameIntegrationTest {
     @Test
     @Order(2)
     void testPlayerInitialization() {
-        assertEquals(3, game.allPlayers.size(), "There should be 3 players in a three-player game.");
-        assertEquals(game.allPlayers.get(0).playerID, Player.player_IDS.PID1);
-        assertEquals(game.allPlayers.get(1).playerID, Player.player_IDS.PID2);
-        assertEquals(game.allPlayers.get(2).playerID, Player.player_IDS.PID3);
+        assertEquals(3, game.activePlayers.size(), "There should be 3 players in a three-player game.");
+        assertEquals(game.activePlayers.get(0).playerID, Player.player_IDS.PID1);
+        assertEquals(game.activePlayers.get(1).playerID, Player.player_IDS.PID2);
+        assertEquals(game.activePlayers.get(2).playerID, Player.player_IDS.PID3);
 
     }
 

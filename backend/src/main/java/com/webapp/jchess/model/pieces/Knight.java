@@ -3,6 +3,7 @@ package com.webapp.jchess.model.pieces;
 import com.webapp.jchess.model.AbstractGame;
 import com.webapp.jchess.model.Player;
 import com.webapp.jchess.model.gamestate.squareVector;
+import com.webapp.jchess.model.gamestate.triangleVector;
 
 public class Knight extends Piece
 {
@@ -21,5 +22,18 @@ public class Knight extends Piece
         this.movementOptions.add(new squareVector(1,-2,1,squareVector.takeEnemyPiece.POSSIBLE));
         this.movementOptions.add(new squareVector(-1,2,1,squareVector.takeEnemyPiece.POSSIBLE));
         this.movementOptions.add(new squareVector(-1,-2,1,squareVector.takeEnemyPiece.POSSIBLE));
+
+        triangleVector triVec = new triangleVector(-2,0,2,-2,0,2,1,squareVector.takeEnemyPiece.POSSIBLE);
+        this.movementOptions.add(triVec);
+        this.movementOptions.add(triVec.invert());
+
+        triVec = new triangleVector(-2,2,0,-2,2,0,1,squareVector.takeEnemyPiece.POSSIBLE);
+        this.movementOptions.add(triVec);
+        this.movementOptions.add(triVec.invert());
+
+        triVec = new triangleVector(0,-2,2,-0,-2,2,1,squareVector.takeEnemyPiece.POSSIBLE);
+        this.movementOptions.add(triVec);
+        this.movementOptions.add(triVec.invert());
+
     }
 }

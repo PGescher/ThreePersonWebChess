@@ -92,23 +92,23 @@ public abstract class Piece
         //if no steps are left
         if(moveVec.maxSteps<=stepCounter) return;
 
-        if(debugOutput) {System.out.println("##### Recursion");}
+        // if(debugOutput) {System.out.println("##### Recursion");}
 
-        if(debugOutput) {System.out.println("From: "+ Arrays.toString(_lastField.getGlobalCoords()));}
+        // if(debugOutput) {System.out.println("From: "+ Arrays.toString(_lastField.getGlobalCoords()));}
         int[] globalCoords = _lastField.addVec(moveVec);
         if(globalCoords==null){
             // Incompatible field and vector
-            if(debugOutput) {System.out.println("Coords are null");}
+            // if(debugOutput) {System.out.println("Coords are null");}
             return;
         }
-        if(debugOutput) {System.out.println("Target: "+ Arrays.toString(globalCoords));}
+        // if(debugOutput) {System.out.println("Target: "+ Arrays.toString(globalCoords));}
 
         AbstractGame.debugOutput = debugOutput;
         AbstractField targetField = piece.game.getField(globalCoords);
         AbstractGame.debugOutput = false;
         //Field doesnt exist.
         if(targetField==null) {
-            if(debugOutput) {System.out.println("Field doesnt exist");}
+            // if(debugOutput) {System.out.println("Field doesnt exist");}
             return;
         }
         

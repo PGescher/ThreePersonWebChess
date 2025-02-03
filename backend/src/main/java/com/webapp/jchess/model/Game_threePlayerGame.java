@@ -21,8 +21,8 @@ public class Game_threePlayerGame extends AbstractGame{
         for(int i = 0;i<numSquareBoards;i++){
             boards[i] = new SquareBoard(i, 8, 4, this);
             ((SquareBoard)boards[i]).addPromotionRow(0);
-            ((SquareBoard)boards[i]).setFigures4NewGame(0, this.allPlayers.get(i));
-            ((SquareBoard)boards[i]).createPawnRow(1, this.allPlayers.get(i));
+            ((SquareBoard)boards[i]).setFigures4NewGame(0, this.activePlayers.get(i));
+            ((SquareBoard)boards[i]).createPawnRow(1, this.activePlayers.get(i));
         }
 
         TriangleBoard triBoard = new TriangleBoard(3, 8,this);
@@ -56,14 +56,14 @@ public class Game_threePlayerGame extends AbstractGame{
                 //Inside the Squareboard
                 return sqBoard.getField(localCoords);
             }else if(localCoords[1]>=sqBoard.getdim_y()&&localCoords[0]<sqBoard.getdim_x()&&localCoords[0]>=0){
-                System.out.println("Out of Squareboard" + Arrays.toString(globalCoords) );
+                // System.out.println("Out of Squareboard" + Arrays.toString(globalCoords) );
                 //Moving out of the squareboard
                 int[] newCoords = new int[4];
                 newCoords[0] = 3;
                 newCoords[1+(3-globalCoords[0])%3] = localCoords[0];
                 newCoords[1+(4-globalCoords[0])%3] = 0;
                 newCoords[1+(5-globalCoords[0])%3] = sqBoard.getdim_x()-localCoords[0]-1;
-                System.out.println("New Cooords" + Arrays.toString(newCoords) );
+                // System.out.println("New Cooords" + Arrays.toString(newCoords) );
                 return this.getField(newCoords);
             }else{
                 //error
@@ -81,12 +81,12 @@ public class Game_threePlayerGame extends AbstractGame{
             //Check if we are outside the triangle and can move to a squareboard
             int idx = IntStream.range(0, localCoords.length).filter(i -> localCoords[i] < 0).findFirst().orElse(-1);
             if(idx != -1 && localCoords[(idx+1)%3]>=0 && localCoords[(idx+1)%3] < ((SquareBoard)boards[0]).getdim_x()){
-                System.out.println("Out of TriBoard" + Arrays.toString(globalCoords) );
+                // System.out.println("Out of TriBoard" + Arrays.toString(globalCoords) );
                 int[] newCoords = new int[3];
                 newCoords[0]=(4-idx)%3;
                 newCoords[1]=((SquareBoard)boards[2]).getdim_x()-1-localCoords[(idx+1)%3];
                 newCoords[2]=((SquareBoard)boards[2]).getdim_y()+localCoords[idx];
-                System.out.println("New Cooords" + Arrays.toString(newCoords) );
+                // System.out.println("New Cooords" + Arrays.toString(newCoords) );
                 return this.getField(newCoords);
             }
             

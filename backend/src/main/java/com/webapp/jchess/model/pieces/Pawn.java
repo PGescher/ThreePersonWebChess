@@ -31,15 +31,15 @@ public class Pawn extends Piece
          * Triangle Movement -  Movement across the Edges, Striking along Corners - Depending on Orientation they are either added or subtracted
          */
 
-        //X-Axis
+        //Move
         this.movementOptions.add(new triangleVector(1,0,0,-1,0,0,1,squareVector.takeEnemyPiece.IMPOSSIBLE));
-        // this.movementOptions.add(new triangleVector(-1, 1, 1, 1, squareVector.takeEnemyPiece.REQUIRED));
-        //Y-Axis
         this.movementOptions.add(new triangleVector(0,1,0,0,-1,0,1,squareVector.takeEnemyPiece.IMPOSSIBLE));
-        // this.movementOptions.add(new triangleVector(1, -1, 1, 1, squareVector.takeEnemyPiece.REQUIRED));
-        //Z-Axis
         this.movementOptions.add(new triangleVector(0,0,1,0,0,-1,1,squareVector.takeEnemyPiece.IMPOSSIBLE));
-        // this.movementOptions.add(new triangleVector(1, 1, -1, 1, squareVector.takeEnemyPiece.REQUIRED));
+
+        //Take enemy piece
+        this.movementOptions.add(new triangleVector(-1, 1, 1, 1,-1,-1,1, squareVector.takeEnemyPiece.REQUIRED));
+        this.movementOptions.add(new triangleVector(1, -1, 1, -1,1,-1,1, squareVector.takeEnemyPiece.REQUIRED));
+        this.movementOptions.add(new triangleVector(1, 1, -1, -1,-1,1,1, squareVector.takeEnemyPiece.REQUIRED));
 
 
 

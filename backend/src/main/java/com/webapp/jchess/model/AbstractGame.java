@@ -7,6 +7,7 @@ import java.util.Stack;
 import com.webapp.jchess.model.gamestate.AbstractField;
 import com.webapp.jchess.model.gamestate.SquareBoard;
 import com.webapp.jchess.model.moves.AbstractMove;
+import com.webapp.jchess.model.moves.RemovePlayer;
 import com.webapp.jchess.model.moves.StandardMove;
 import com.webapp.jchess.model.pieces.King;
 import com.webapp.jchess.model.pieces.Piece;
@@ -29,11 +30,12 @@ import com.webapp.jchess.model.pieces.Piece;
 public abstract class AbstractGame {
     public static boolean debugOutput = false;
     
-    public ArrayList<Player> allPlayers;
+    public ArrayList<Player> activePlayers;
     private int activePlayerIdx = 0;
 
     private Piece selectedPiece;
     public ArrayList<Piece> activePieces;
+    public ArrayList<Piece> inactivePieces;
     public HashMap<Player.player_IDS,King> kings;
 
     protected Stack<AbstractMove> moveBackStack = new Stack<AbstractMove>();
@@ -41,11 +43,11 @@ public abstract class AbstractGame {
 
     AbstractGame(int playerNum){
         //TODO: Make this more variable and dependant on playerNum?
-        allPlayers=new ArrayList<Player>();
-        allPlayers.add(new Player(Player.player_IDS.PID1));
-        allPlayers.add(new Player(Player.player_IDS.PID2));
+        activePlayers=new ArrayList<Player>();
+        activePlayers.add(new Player(Player.player_IDS.PID1));
+        activePlayers.add(new Player(Player.player_IDS.PID2));
         if(playerNum == 3){
-            allPlayers.add(new Player(Player.player_IDS.PID3));
+            activePlayers.add(new Player(Player.player_IDS.PID3));
         }
         
         kings = new HashMap<>();
@@ -64,9 +66,35 @@ public abstract class AbstractGame {
 
     public void removePiece(Piece piece){
         AbstractField fieldRef = piece.field;
-        piece.field = null;
+        // piece.field = null;
         fieldRef.piece = null;
         activePieces.remove(piece);
+    }
+
+    public int removePlayer(Player _player){
+        activePlayers.remove(_player);
+        kings.remove(_player.playerID);
+        return activePlayerIdx;
+
+    }
+
+    public void reAddPiece(Piece piece){
+        piece.field.piece = piece;
+        activePieces.add(piece);
+    }
+
+    public void reAddPlayer(Player _player,int idx){
+        activePlayers.add(idx,_player);
+        for(Piece p: activePieces){
+            // System.out.println("K");
+            if(p.player==_player && p instanceof King){
+                // System.out.println("### K2");
+                kings.put(_player.playerID, (King)p);
+                break;
+            }
+        }
+
+
     }
 
     public void getDrawablePieces(ArrayList<int[]> coordList, 
@@ -145,10 +173,12 @@ public abstract class AbstractGame {
                 switch (activePlayerCheckmate())
                 {
                     case 1:
-                        endGame("Checkmate for player " + getActivePlayer() );
-                        break;
                     case 2:
-                        endGame("Stalemate! Draw!");
+                        RemovePlayer rmPlayer = new RemovePlayer(this, getActivePlayer());
+                        move(rmPlayer);
+                        // removePlayer(getActivePlayer());
+                        // nextMove();
+                        // endGame("Checkmate for player " + getActivePlayer() );
                         break;
                 }
                 return 2;
@@ -207,7 +237,8 @@ public abstract class AbstractGame {
     }
 
     public Player getActivePlayer(){
-        return allPlayers.get(activePlayerIdx);
+        if(activePlayerIdx>=activePlayers.size()){ activePlayerIdx = activePlayerIdx % activePlayers.size();}
+        return activePlayers.get(activePlayerIdx);
     }
 
     ///////////////////////////////////////////////////////////////
@@ -215,11 +246,11 @@ public abstract class AbstractGame {
 
     private void switchActivePlayer()
     {
-        activePlayerIdx = (activePlayerIdx+1)%allPlayers.size();
+        activePlayerIdx = (activePlayerIdx+1)%activePlayers.size();
     }
 
     private void switchActivePlayerBack(){
-        activePlayerIdx = (activePlayerIdx-1)%allPlayers.size();
+        activePlayerIdx = (activePlayerIdx+(activePlayers.size()-1))%activePlayers.size();
     }
 
     private void nextMove()
