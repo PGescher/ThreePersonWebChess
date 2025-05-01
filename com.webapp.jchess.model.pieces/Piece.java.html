@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Piece.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBoot backend</a> &gt; <a href="index.source.html" class="el_package">com.webapp.jchess.model.pieces</a> &gt; <span class="el_source">Piece.java</span></div><h1>Piece.java</h1><pre class="source lang-java linenums">package com.webapp.jchess.model.pieces;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.webapp.jchess.model.AbstractGame;
+import com.webapp.jchess.model.Player;
+import com.webapp.jchess.model.gamestate.*;
+
+
+
+/** 
+ * Abstract Piece Class
+ * 
+ * - Provides the central interaface other backend logic interacts with
+ * - Uses the movement directions and special moves given by specific pieces to calculate their possible moves.
+ * 
+*/
+
+public abstract class Piece
+{
+<span class="fc" id="L21">    static boolean debugOutput = false;</span>
+
+<span class="fc" id="L23">    public enum typesOfPieces{</span>
+<span class="fc" id="L24">        Pawn, Rook, Knight, Bishop, King, Queen</span>
+    }
+
+<span class="fc" id="L27">    public boolean wasMoved = false;</span>
+    public AbstractGame game; // &lt;-- this relations isn't in class diagram, but it's necessary :/
+    public AbstractField field;
+    public Player player;
+    public typesOfPieces pieceType;
+    public String symbol;
+    //public String imageName;
+    protected ArrayList&lt;abstractVector&gt; movementOptions;
+
+    public Piece(AbstractGame game, Player player, typesOfPieces _pieceType)
+<span class="fc" id="L37">    {</span>
+<span class="fc" id="L38">        this.game = game;</span>
+<span class="fc" id="L39">        this.player = player;</span>
+<span class="fc" id="L40">        this.pieceType = _pieceType;</span>
+
+<span class="fc" id="L42">        movementOptions = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L43">    }</span>
+
+<span class="fc" id="L45">    public void specialMoves(ArrayList&lt;AbstractField&gt; validMoves){};</span>
+
+    public ArrayList&lt;AbstractField&gt; possibleMoves(){
+<span class="fc" id="L48">        ArrayList&lt;AbstractField&gt; allMoves = new ArrayList&lt;AbstractField&gt;();</span>
+        
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        for(abstractVector moveVec: movementOptions){</span>
+<span class="fc" id="L51">            recursiveDirectionCheck(allMoves, this, this.field, moveVec,0);</span>
+<span class="fc" id="L52">        }</span>
+
+<span class="fc" id="L54">        this.specialMoves(allMoves);</span>
+
+<span class="fc" id="L56">        return allMoves;</span>
+    }
+
+    public int [] getGlobalCoords(){
+<span class="fc" id="L60">        return this.field.getGlobalCoords();</span>
+    }
+    public ArrayList&lt;AbstractField&gt; validMoves()
+    {
+<span class="fc" id="L64">        debugOutput = true;</span>
+<span class="fc" id="L65">        ArrayList&lt;AbstractField&gt; allMoves = possibleMoves();</span>
+<span class="fc" id="L66">        debugOutput = false;</span>
+
+        //Find relevant king
+<span class="fc" id="L69">        King relevantKing = game.kings.get(this.player.playerID);</span>
+
+        //Collect valid moves
+<span class="fc" id="L72">        ArrayList&lt;AbstractField&gt; validMoves = new ArrayList&lt;AbstractField&gt;();</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for(AbstractField move: allMoves){</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            if(relevantKing.willBeSafeAfterMove(this.field, move)){</span>
+<span class="fc" id="L75">                validMoves.add(move);</span>
+            }
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">        return validMoves;</span>
+    }
+
+    public typesOfPieces getType()
+    {
+<span class="nc" id="L83">        return this.pieceType;</span>
+    }
+    
+
+    public static void recursiveDirectionCheck(ArrayList&lt;AbstractField&gt; validMoves,Piece piece,
+    AbstractField _lastField,abstractVector moveVec,int stepCounter) {
+
+<span class="fc" id="L90">        boolean continueRecursion = false;</span>
+
+        //if no steps are left
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if(moveVec.maxSteps&lt;=stepCounter) return;</span>
+
+        // if(debugOutput) {System.out.println(&quot;##### Recursion&quot;);}
+
+        // if(debugOutput) {System.out.println(&quot;From: &quot;+ Arrays.toString(_lastField.getGlobalCoords()));}
+<span class="fc" id="L98">        int[] globalCoords = _lastField.addVec(moveVec);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if(globalCoords==null){</span>
+            // Incompatible field and vector
+            // if(debugOutput) {System.out.println(&quot;Coords are null&quot;);}
+<span class="fc" id="L102">            return;</span>
+        }
+        // if(debugOutput) {System.out.println(&quot;Target: &quot;+ Arrays.toString(globalCoords));}
+
+<span class="fc" id="L106">        AbstractGame.debugOutput = debugOutput;</span>
+<span class="fc" id="L107">        AbstractField targetField = piece.game.getField(globalCoords);</span>
+<span class="fc" id="L108">        AbstractGame.debugOutput = false;</span>
+        //Field doesnt exist.
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if(targetField==null) {</span>
+            // if(debugOutput) {System.out.println(&quot;Field doesnt exist&quot;);}
+<span class="fc" id="L112">            return;</span>
+        }
+        
+ 
+        //Collision with own figure
+<span class="fc bfc" id="L117" title="All 4 branches covered.">        if (targetField.piece != null &amp;&amp; targetField.piece.player == piece.player){return;}</span>
+    
+        //If Field is empty or contains enemy piece
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if(targetField.piece == null){</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            if(moveVec.takeEnemy!=squareVector.takeEnemyPiece.REQUIRED){</span>
+<span class="fc" id="L122">                validMoves.add(targetField);</span>
+            }
+<span class="fc" id="L124">            continueRecursion = true;</span>
+            
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        }else if (targetField.piece.player != piece.player) {</span>
+            // check if enemy piece can be taken
+<span class="fc bfc" id="L128" title="All 2 branches covered.">            if(moveVec.takeEnemy!=squareVector.takeEnemyPiece.IMPOSSIBLE){</span>
+<span class="fc" id="L129">                validMoves.add(targetField);</span>
+            }
+        }
+
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        if (continueRecursion) {</span>
+            
+<span class="fc bfc" id="L135" title="All 2 branches covered.">            if (_lastField.getGlobalCoords()[0] == targetField.getGlobalCoords()[0]) {</span>
+                //We stay on the same board
+<span class="fc" id="L137">                recursiveDirectionCheck(validMoves, piece, targetField,moveVec,stepCounter+1);</span>
+            }else{
+                // for(abstractVector testVec: piece.movementOptions){
+                //     int[] tmpCoords = targetField.addVec(testVec);
+                //     if(tmpCoords==null)continue;
+                //     if(tmpCoords[0] != _lastField.getGlobalCoords()[0]){
+                //         //if the vector doesn immediatly move us back to the original board
+                //         recursiveDirectionCheck(validMoves, piece, targetField,testVec,stepCounter+1);
+                //     }
+                // }
+            }
+            
+        }
+
+
+<span class="fc" id="L152">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

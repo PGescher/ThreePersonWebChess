@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Pawn.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBoot backend</a> &gt; <a href="index.source.html" class="el_package">com.webapp.jchess.model.pieces</a> &gt; <span class="el_source">Pawn.java</span></div><h1>Pawn.java</h1><pre class="source lang-java linenums">package com.webapp.jchess.model.pieces;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.webapp.jchess.model.AbstractGame;
+import com.webapp.jchess.model.Player;
+import com.webapp.jchess.model.gamestate.Square;
+import com.webapp.jchess.model.gamestate.squareVector;
+import com.webapp.jchess.model.gamestate.triangleVector;
+
+public class Pawn extends Piece
+{
+    public Pawn(AbstractGame game, Player player)
+    {
+<span class="fc" id="L16">        super(game, player,Piece.typesOfPieces.Pawn);</span>
+<span class="fc" id="L17">        this.symbol = &quot;P&quot;;</span>
+
+        // this.movement = new PawnMovement();
+        //Forward Movement - Strike left and right diagonal forward
+<span class="fc" id="L21">        this.movementOptions.add(new squareVector(0,1,1,squareVector.takeEnemyPiece.IMPOSSIBLE));</span>
+<span class="fc" id="L22">        this.movementOptions.add(new squareVector(-1,1,1,squareVector.takeEnemyPiece.REQUIRED));</span>
+<span class="fc" id="L23">        this.movementOptions.add(new squareVector(1,1,1,squareVector.takeEnemyPiece.REQUIRED));</span>
+
+        //Backward Movement - Strike left and right diagonal backwards
+<span class="fc" id="L26">        this.movementOptions.add(new squareVector(0,-1,1,squareVector.takeEnemyPiece.IMPOSSIBLE));</span>
+<span class="fc" id="L27">        this.movementOptions.add(new squareVector(-1,-1,1,squareVector.takeEnemyPiece.REQUIRED));</span>
+<span class="fc" id="L28">        this.movementOptions.add(new squareVector(1,-1,1,squareVector.takeEnemyPiece.REQUIRED));</span>
+
+        /*
+         * Triangle Movement -  Movement across the Edges, Striking along Corners - Depending on Orientation they are either added or subtracted
+         */
+
+        //Move
+<span class="fc" id="L35">        this.movementOptions.add(new triangleVector(1,0,0,-1,0,0,1,squareVector.takeEnemyPiece.IMPOSSIBLE));</span>
+<span class="fc" id="L36">        this.movementOptions.add(new triangleVector(0,1,0,0,-1,0,1,squareVector.takeEnemyPiece.IMPOSSIBLE));</span>
+<span class="fc" id="L37">        this.movementOptions.add(new triangleVector(0,0,1,0,0,-1,1,squareVector.takeEnemyPiece.IMPOSSIBLE));</span>
+
+        //Take enemy piece
+<span class="fc" id="L40">        this.movementOptions.add(new triangleVector(-1, 1, 1, 1,-1,-1,1, squareVector.takeEnemyPiece.REQUIRED));</span>
+<span class="fc" id="L41">        this.movementOptions.add(new triangleVector(1, -1, 1, -1,1,-1,1, squareVector.takeEnemyPiece.REQUIRED));</span>
+<span class="fc" id="L42">        this.movementOptions.add(new triangleVector(1, 1, -1, -1,-1,1,1, squareVector.takeEnemyPiece.REQUIRED));</span>
+
+
+
+        
+
+        //ADD Special moves
+        // Add En Passant
+
+        // Maybe remove pawns ability to move backwards. 
+        // That would make it impossible to move between enemy chessboards
+<span class="fc" id="L53">    }</span>
+
+    
+    /*
+    @Override
+    public void specialMoves(ArrayList&lt;AbstractField&gt; validMoves){
+        if(!(this.field instanceof Square)) return;
+        Square curPos = (Square) this.field;
+        if(!this.wasMoved){
+            int[] coords;
+            if(curPos.boardid == -1){
+                coords = new int[]{curPos.coords[0],curPos.coords[1]+1};
+            }else {
+                coords = new int[]{curPos.boardid, curPos.coords[0],curPos.coords[1]+1};
+            }
+            if(this.game.getField(coords).piece==null){
+                movementVector specialMove = new movementVector(0,2,1,movementVector.takeEnemyPiece.IMPOSSIBLE);
+                recursiveDirectionCheck(validMoves, this, this.field, specialMove,0);
+            }
+            int[] coords2;
+            if(curPos.boardid == -1){
+                coords2 = new int[]{curPos.coords[0],curPos.coords[1]-1};
+            }else {
+                coords2 = new int[]{curPos.boardid, curPos.coords[0],curPos.coords[1]-1};
+            }
+            if(this.game.getField(coords2).piece==null){
+                movementVector specialMove = new movementVector(0,-2,1,movementVector.takeEnemyPiece.IMPOSSIBLE);
+                recursiveDirectionCheck(validMoves, this, this.field, specialMove,0);
+            }
+        }
+    }
+    */
+
+    public void promote(String newPiece,Square square)
+    {
+        Piece piece;
+<span class="nc bnc" id="L89" title="All 4 branches missed.">        switch (newPiece) {</span>
+            case &quot;Queen&quot;:
+<span class="nc" id="L91">                piece = new Queen(this.game, square.piece.player);</span>
+<span class="nc" id="L92">                break;</span>
+            case &quot;Rook&quot;:
+<span class="nc" id="L94">                piece = new Rook(this.game, square.piece.player);</span>
+<span class="nc" id="L95">                break;</span>
+            case &quot;Bishop&quot;:
+<span class="nc" id="L97">                piece = new Bishop(this.game, square.piece.player);</span>
+<span class="nc" id="L98">                break;</span>
+            default:
+<span class="nc" id="L100">                piece = new Knight(this.game, square.piece.player);</span>
+                break;
+        }
+<span class="nc" id="L103">        this.game.activePieces.remove(this);</span>
+<span class="nc" id="L104">        piece.game = square.piece.game;</span>
+<span class="nc" id="L105">        piece.player = square.piece.player;</span>
+<span class="nc" id="L106">        piece.field = square.piece.field;</span>
+<span class="nc" id="L107">        square.piece = piece;</span>
+<span class="nc" id="L108">        this.game.activePieces.add(piece);</span>
+<span class="nc" id="L109">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Queen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBoot backend</a> &gt; <a href="index.source.html" class="el_package">com.webapp.jchess.model.pieces</a> &gt; <span class="el_source">Queen.java</span></div><h1>Queen.java</h1><pre class="source lang-java linenums">package com.webapp.jchess.model.pieces;
+
+import com.webapp.jchess.model.AbstractGame;
+import com.webapp.jchess.model.Player;
+import com.webapp.jchess.model.gamestate.squareVector;
+import com.webapp.jchess.model.gamestate.triangleVector;
+import com.webapp.jchess.model.gamestate.abstractVector.takeEnemyPiece;
+
+public class Queen extends Piece
+{
+
+    public Queen(AbstractGame game, Player player)
+    {
+<span class="fc" id="L14">        super(game, player,Piece.typesOfPieces.Queen);//call initializer of super type: Piece</span>
+<span class="fc" id="L15">        this.symbol = &quot;Q&quot;;</span>
+
+        //Dont couple this with rook or bishop.
+        //Otherwise changing the classes becomes more complicated
+<span class="fc" id="L19">        this.movementOptions.add(new squareVector(1,1,7,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L20">        this.movementOptions.add(new squareVector(1,-1,7,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L21">        this.movementOptions.add(new squareVector(-1,1,7,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L22">        this.movementOptions.add(new squareVector(-1,-1,7,takeEnemyPiece.POSSIBLE));</span>
+
+<span class="fc" id="L24">        this.movementOptions.add(new squareVector(1,0,7,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L25">        this.movementOptions.add(new squareVector(-1,0,7,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L26">        this.movementOptions.add(new squareVector(0,1,7,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L27">        this.movementOptions.add(new squareVector(0,-1,7,takeEnemyPiece.POSSIBLE));</span>
+
+
+        //Triangle horizontal and vertical
+<span class="fc" id="L31">        triangleVector triVec = new triangleVector(0,0,1,-1,0,0,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L32">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L33">        this.movementOptions.add(triVec.invert());</span>
+
+<span class="fc" id="L35">        triVec = new triangleVector(0,1,0,-1,0,0,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L36">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L37">        this.movementOptions.add(triVec.invert());</span>
+
+<span class="fc" id="L39">        triVec = new triangleVector(0,1,0,0,0,-1,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L40">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L41">        this.movementOptions.add(triVec.invert());</span>
+
+        //Triangle diagonal
+<span class="fc" id="L44">        triVec = new triangleVector(-1,1,1,-1,0,0,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L45">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L46">        this.movementOptions.add(triVec.invert());</span>
+
+<span class="fc" id="L48">        triVec = new triangleVector(0,0,1,1,1,0,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L49">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L50">        this.movementOptions.add(triVec.invert());</span>
+
+<span class="fc" id="L52">        triVec = new triangleVector(0,1,0,-1,1,-1,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L53">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L54">        this.movementOptions.add(triVec.invert());</span>
+<span class="fc" id="L55">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

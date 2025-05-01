@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractGame.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBoot backend</a> &gt; <a href="index.source.html" class="el_package">com.webapp.jchess.model</a> &gt; <span class="el_source">AbstractGame.java</span></div><h1>AbstractGame.java</h1><pre class="source lang-java linenums">package com.webapp.jchess.model;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
+
+import com.webapp.jchess.model.gamestate.AbstractField;
+import com.webapp.jchess.model.gamestate.SquareBoard;
+import com.webapp.jchess.model.moves.AbstractMove;
+import com.webapp.jchess.model.moves.RemovePlayer;
+import com.webapp.jchess.model.moves.StandardMove;
+import com.webapp.jchess.model.pieces.King;
+import com.webapp.jchess.model.pieces.Piece;
+
+
+/** 
+ * Abstract Game Class
+ * 
+ * This class provides all the necessary game logic that is the same for all game types
+ * - starting games, 
+ * - making, undoing and redoing moves 
+ * - player logic 
+ * 
+ * Specific Games only have to complete a small set of functions after they have decided on their board game setup. &lt;br&gt;
+   - abstract public AbstractField getField(int []coords); &lt;br&gt;
+   - abstract public void endGame(String str); &lt;br&gt;
+   - abstract public boolean validCoordinates(int [] coords); &lt;br&gt;
+   - abstract public boolean isPromotionField(int[] coords);
+*/
+public abstract class AbstractGame {
+<span class="fc" id="L31">    public static boolean debugOutput = false;</span>
+    
+    public ArrayList&lt;Player&gt; activePlayers;
+<span class="fc" id="L34">    private int activePlayerIdx = 0;</span>
+
+    private Piece selectedPiece;
+    public ArrayList&lt;Piece&gt; activePieces;
+    public ArrayList&lt;Piece&gt; inactivePieces;
+    public HashMap&lt;Player.player_IDS,King&gt; kings;
+
+<span class="fc" id="L41">    protected Stack&lt;AbstractMove&gt; moveBackStack = new Stack&lt;AbstractMove&gt;();</span>
+<span class="fc" id="L42">    protected Stack&lt;AbstractMove&gt; moveForwardStack = new Stack&lt;AbstractMove&gt;();</span>
+
+<span class="fc" id="L44">    AbstractGame(int playerNum){</span>
+        //TODO: Make this more variable and dependant on playerNum?
+<span class="fc" id="L46">        activePlayers=new ArrayList&lt;Player&gt;();</span>
+<span class="fc" id="L47">        activePlayers.add(new Player(Player.player_IDS.PID1));</span>
+<span class="fc" id="L48">        activePlayers.add(new Player(Player.player_IDS.PID2));</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if(playerNum == 3){</span>
+<span class="fc" id="L50">            activePlayers.add(new Player(Player.player_IDS.PID3));</span>
+        }
+        
+<span class="fc" id="L53">        kings = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L54">        activePieces = new ArrayList&lt;Piece&gt;();</span>
+<span class="fc" id="L55">        selectedPiece = null;</span>
+<span class="fc" id="L56">    }</span>
+
+    abstract public AbstractField getField(int []coords);
+    abstract public void endGame(String str);
+    abstract public boolean validCoordinates(int [] coords);
+    abstract public boolean isPromotionField(int[] globalCoords);
+
+    public boolean pieceIsSelected(){
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        return selectedPiece != null;</span>
+    }
+
+    public void removePiece(Piece piece){
+<span class="fc" id="L68">        AbstractField fieldRef = piece.field;</span>
+        // piece.field = null;
+<span class="fc" id="L70">        fieldRef.piece = null;</span>
+<span class="fc" id="L71">        activePieces.remove(piece);</span>
+<span class="fc" id="L72">    }</span>
+
+    public int removePlayer(Player _player){
+<span class="nc" id="L75">        activePlayers.remove(_player);</span>
+<span class="nc" id="L76">        kings.remove(_player.playerID);</span>
+<span class="nc" id="L77">        return activePlayerIdx;</span>
+
+    }
+
+    public void reAddPiece(Piece piece){
+<span class="nc" id="L82">        piece.field.piece = piece;</span>
+<span class="nc" id="L83">        activePieces.add(piece);</span>
+<span class="nc" id="L84">    }</span>
+
+    public void reAddPlayer(Player _player,int idx){
+<span class="nc" id="L87">        activePlayers.add(idx,_player);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        for(Piece p: activePieces){</span>
+            // System.out.println(&quot;K&quot;);
+<span class="nc bnc" id="L90" title="All 4 branches missed.">            if(p.player==_player &amp;&amp; p instanceof King){</span>
+                // System.out.println(&quot;### K2&quot;);
+<span class="nc" id="L92">                kings.put(_player.playerID, (King)p);</span>
+<span class="nc" id="L93">                break;</span>
+            }
+<span class="nc" id="L95">        }</span>
+
+
+<span class="nc" id="L98">    }</span>
+
+    public void getDrawablePieces(ArrayList&lt;int[]&gt; coordList, 
+    ArrayList&lt;String&gt; pieceList, ArrayList&lt;String&gt; playerList){
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        for(Piece p: activePieces){</span>
+<span class="fc" id="L103">            coordList.add(p.getGlobalCoords());</span>
+<span class="fc" id="L104">            pieceList.add(p.pieceType.name());</span>
+<span class="fc" id="L105">            playerList.add(p.player.playerID.name());</span>
+<span class="fc" id="L106">        }</span>
+<span class="fc" id="L107">    }</span>
+
+    public void getHighlightedFields(ArrayList&lt;int[]&gt; coordList, ArrayList&lt;String&gt; fieldType){
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if(!pieceIsSelected()){ return;}</span>
+<span class="fc" id="L111">        coordList.add(selectedPiece.getGlobalCoords());</span>
+<span class="fc" id="L112">        fieldType.add(&quot;a&quot;);</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        for(AbstractField field: selectedPiece.validMoves()){</span>
+            //Changes coordList to getGlobalCoordinates
+<span class="fc" id="L115">            coordList.add(field.getGlobalCoords());</span>
+<span class="fc" id="L116">            fieldType.add(&quot;p&quot;);</span>
+<span class="fc" id="L117">        }</span>
+<span class="fc" id="L118">    }</span>
+
+
+
+    public AbstractMove move(AbstractMove move){
+<span class="fc" id="L123">        return this.move(move,true);</span>
+    }
+    
+    public int selectField(int[] globalCoords){
+
+<span class="fc" id="L128">        return selectField(globalCoords, null);</span>
+    }
+
+    public int selectField(int[] globalCoords, Piece tobePromotedTo){
+        //{id, x, y} or {id, x, y, z}
+        //0-2 Square, 3 Triangle
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if(!validCoordinates(globalCoords)){return 0;}</span>
+<span class="fc" id="L135">        AbstractField field = getField(globalCoords);</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if(field==null){</span>
+<span class="nc" id="L137">            System.out.print((&quot;ERROR: no field at coords&quot;));</span>
+<span class="nc" id="L138">            System.out.println(globalCoords);</span>
+<span class="nc" id="L139">            return 0;} //No Square at coords</span>
+        
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        if(!pieceIsSelected()){ //We havent selected a piece yet</span>
+            //Selected field doesnt contain a piece
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">            if(field.piece==null){ return 0;}</span>
+            //Selected field contains enemy piece
+<span class="fc bfc" id="L145" title="All 2 branches covered.">            if(field.piece.player != getActivePlayer()){return 0;}</span>
+
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">            if(field.piece.player == getActivePlayer()){</span>
+<span class="fc" id="L148">                selectedPiece = field.piece;</span>
+                //TODO: Calculate validMoves and save them somewhere
+<span class="fc" id="L150">                return 1;</span>
+            }
+        }else{  //A piece has been previously selected
+            //If the field is among our valid moves
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">            if(selectedPiece.validMoves().indexOf(field)!=-1){</span>
+<span class="pc bpc" id="L155" title="2 of 4 branches missed.">                if((tobePromotedTo == null) &amp;&amp; (isPromotionField(globalCoords))) {return 3;} //Is a promotion field redo and request more info from User.</span>
+<span class="fc" id="L156">                System.out.println(&quot;Not a PromotionField&quot;);</span>
+<span class="fc" id="L157">                StandardMove stMove = new StandardMove(selectedPiece, field);</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">                if(tobePromotedTo != null){</span>
+<span class="nc" id="L159">                    stMove.setPromotionPiece(tobePromotedTo);</span>
+                }
+                else{
+<span class="fc" id="L162">                    System.out.println(&quot;Piece Code is not 1-4&quot;);</span>
+                }
+                
+<span class="fc" id="L165">                move(stMove);</span>
+                
+<span class="fc" id="L167">                selectedPiece=null;</span>
+
+                //switch player
+<span class="fc" id="L170">                nextMove();</span>
+
+                //checkmate or stalemate
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">                switch (activePlayerCheckmate())</span>
+                {
+                    case 1:
+                    case 2:
+<span class="nc" id="L177">                        RemovePlayer rmPlayer = new RemovePlayer(this, getActivePlayer());</span>
+<span class="nc" id="L178">                        move(rmPlayer);</span>
+                        // removePlayer(getActivePlayer());
+                        // nextMove();
+                        // endGame(&quot;Checkmate for player &quot; + getActivePlayer() );
+                        break;
+                }
+<span class="fc" id="L184">                return 2;</span>
+            }
+            //We select a new piece
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            else if(field.piece != null </span>
+<span class="nc bnc" id="L188" title="All 4 branches missed.">                &amp;&amp; field.piece.player == getActivePlayer() </span>
+                &amp;&amp; field.piece != selectedPiece){
+<span class="nc" id="L190">                selectedPiece = field.piece;</span>
+                //TODO: Calculate validMoves and save them somewhere
+<span class="nc" id="L192">                return 1;</span>
+            }
+<span class="nc" id="L194">            return 0;</span>
+        }
+        
+<span class="nc" id="L197">                return -1;</span>
+    }
+
+    public boolean undo()
+    {
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if(moveBackStack.empty()){return false;}</span>
+
+<span class="fc" id="L204">        AbstractMove lastMove = this.moveBackStack.pop();</span>
+
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        if( lastMove !=null )</span>
+        {
+<span class="fc" id="L208">            moveForwardStack.push(lastMove);</span>
+<span class="fc" id="L209">            lastMove.undo_move();</span>
+            
+            // if(this.moveHistoryDisplay!=null){
+            //     this.moveHistoryDisplay.removeLastMove();
+            // }
+<span class="fc" id="L214">            this.switchActivePlayerBack();</span>
+
+            
+        }
+ 
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">        return lastMove !=null;</span>
+    }
+
+    public AbstractMove redo()
+    {
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (moveForwardStack.empty()){ return null; }</span>
+<span class="fc" id="L225">        AbstractMove move = this.moveForwardStack.pop();</span>
+
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if ( move!=null )</span>
+        {
+<span class="fc" id="L229">            move.execute_move();</span>
+<span class="fc" id="L230">            this.moveBackStack.push(move);</span>
+            // this.addMovetoHistory(move);
+<span class="fc" id="L232">            this.nextMove();</span>
+        }
+
+
+<span class="fc" id="L236">        return move;</span>
+    }
+
+    public Player getActivePlayer(){
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">        if(activePlayerIdx&gt;=activePlayers.size()){ activePlayerIdx = activePlayerIdx % activePlayers.size();}</span>
+<span class="fc" id="L241">        return activePlayers.get(activePlayerIdx);</span>
+    }
+
+    ///////////////////////////////////////////////////////////////
+    /// // Private methods
+
+    private void switchActivePlayer()
+    {
+<span class="fc" id="L249">        activePlayerIdx = (activePlayerIdx+1)%activePlayers.size();</span>
+<span class="fc" id="L250">    }</span>
+
+    private void switchActivePlayerBack(){
+<span class="fc" id="L253">        activePlayerIdx = (activePlayerIdx+(activePlayers.size()-1))%activePlayers.size();</span>
+<span class="fc" id="L254">    }</span>
+
+    private void nextMove()
+    {
+<span class="fc" id="L258">        switchActivePlayer();</span>
+
+<span class="fc" id="L260">        System.out.println(&quot;next move, active playerID: &quot; + getActivePlayer().playerID.name() );</span>
+<span class="fc" id="L261">    }</span>
+
+    private int activePlayerCheckmate(){
+<span class="fc" id="L264">        King king = kings.get(getActivePlayer().playerID);</span>
+<span class="fc" id="L265">        return king.isCheckmatedOrStalemated();</span>
+    }
+
+    private AbstractMove move(AbstractMove move, boolean clearForwardHistory){
+<span class="fc" id="L269">        move.execute_move();</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        if (clearForwardHistory)</span>
+        {   
+<span class="fc" id="L272">            this.moveForwardStack.clear();</span>
+<span class="fc" id="L273">            this.moveBackStack.add(move);</span>
+        }
+<span class="fc" id="L275">        return move;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

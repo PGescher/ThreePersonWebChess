@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Game_threePlayerGame.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBoot backend</a> &gt; <a href="index.source.html" class="el_package">com.webapp.jchess.model</a> &gt; <span class="el_source">Game_threePlayerGame.java</span></div><h1>Game_threePlayerGame.java</h1><pre class="source lang-java linenums">package com.webapp.jchess.model;
+
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
+import com.webapp.jchess.model.gamestate.AbstractBoard;
+import com.webapp.jchess.model.gamestate.AbstractField;
+import com.webapp.jchess.model.gamestate.SquareBoard;
+import com.webapp.jchess.model.gamestate.TriangleBoard;
+import com.webapp.jchess.model.pieces.Piece;
+
+public class Game_threePlayerGame extends AbstractGame{
+<span class="fc" id="L13">    final int numSquareBoards = 3;</span>
+
+    AbstractBoard[] boards;
+
+    public Game_threePlayerGame (){
+<span class="fc" id="L18">        super(3);</span>
+<span class="fc" id="L19">        boards = new AbstractBoard[4];</span>
+
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        for(int i = 0;i&lt;numSquareBoards;i++){</span>
+<span class="fc" id="L22">            boards[i] = new SquareBoard(i, 8, 4, this);</span>
+<span class="fc" id="L23">            ((SquareBoard)boards[i]).addPromotionRow(0);</span>
+<span class="fc" id="L24">            ((SquareBoard)boards[i]).setFigures4NewGame(0, this.activePlayers.get(i));</span>
+<span class="fc" id="L25">            ((SquareBoard)boards[i]).createPawnRow(1, this.activePlayers.get(i));</span>
+        }
+
+<span class="fc" id="L28">        TriangleBoard triBoard = new TriangleBoard(3, 8,this);</span>
+
+        //triBoard.setPawn(0, this.allPlayers.get(0));
+        //triBoard.setPawn(14, this.allPlayers.get(1));
+        //triBoard.setPawn(63, this.allPlayers.get(2));
+
+        // triBoard.setPawn(32, this.allPlayers.get(0));
+        // triBoard.setPawn(45, this.allPlayers.get(1));
+        // triBoard.setPawn(50, this.allPlayers.get(2));
+
+<span class="fc" id="L38">        boards[3] = triBoard;</span>
+<span class="fc" id="L39">    }</span>
+
+
+    @Override
+    public AbstractField getField(int[] globalCoords) {
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if(globalCoords==null)return null;</span>
+
+        //For Squareboards
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if(globalCoords[0]&lt;0){</span>
+<span class="nc" id="L48">            return null;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        } else if(globalCoords[0]&lt;3){</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">            if(globalCoords.length!=3){ return null;} </span>
+<span class="fc" id="L51">            SquareBoard sqBoard = (SquareBoard)boards[globalCoords[0]];</span>
+<span class="fc" id="L52">            int[] localCoords = Arrays.copyOfRange(globalCoords, 1, globalCoords.length);</span>
+
+            
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if(sqBoard.validCoordinates(localCoords)){</span>
+                //Inside the Squareboard
+<span class="fc" id="L57">                return sqBoard.getField(localCoords);</span>
+<span class="fc bfc" id="L58" title="All 6 branches covered.">            }else if(localCoords[1]&gt;=sqBoard.getdim_y()&amp;&amp;localCoords[0]&lt;sqBoard.getdim_x()&amp;&amp;localCoords[0]&gt;=0){</span>
+                // System.out.println(&quot;Out of Squareboard&quot; + Arrays.toString(globalCoords) );
+                //Moving out of the squareboard
+<span class="fc" id="L61">                int[] newCoords = new int[4];</span>
+<span class="fc" id="L62">                newCoords[0] = 3;</span>
+<span class="fc" id="L63">                newCoords[1+(3-globalCoords[0])%3] = localCoords[0];</span>
+<span class="fc" id="L64">                newCoords[1+(4-globalCoords[0])%3] = 0;</span>
+<span class="fc" id="L65">                newCoords[1+(5-globalCoords[0])%3] = sqBoard.getdim_x()-localCoords[0]-1;</span>
+                // System.out.println(&quot;New Cooords&quot; + Arrays.toString(newCoords) );
+<span class="fc" id="L67">                return this.getField(newCoords);</span>
+            }else{
+                //error
+<span class="fc" id="L70">                return null;</span>
+            }
+            
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        } else if(globalCoords[0]==3){</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            if(globalCoords.length!=4)return null;</span>
+<span class="fc" id="L75">            int[] localCoords = Arrays.copyOfRange(globalCoords, 1, globalCoords.length);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">            if(boards[3].validCoordinates(localCoords)){</span>
+                //Inside triangle
+<span class="fc" id="L78">                return boards[3].getField(localCoords);</span>
+            }
+
+            //Check if we are outside the triangle and can move to a squareboard
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            int idx = IntStream.range(0, localCoords.length).filter(i -&gt; localCoords[i] &lt; 0).findFirst().orElse(-1);</span>
+<span class="pc bpc" id="L83" title="2 of 6 branches missed.">            if(idx != -1 &amp;&amp; localCoords[(idx+1)%3]&gt;=0 &amp;&amp; localCoords[(idx+1)%3] &lt; ((SquareBoard)boards[0]).getdim_x()){</span>
+                // System.out.println(&quot;Out of TriBoard&quot; + Arrays.toString(globalCoords) );
+<span class="fc" id="L85">                int[] newCoords = new int[3];</span>
+<span class="fc" id="L86">                newCoords[0]=(4-idx)%3;</span>
+<span class="fc" id="L87">                newCoords[1]=((SquareBoard)boards[2]).getdim_x()-1-localCoords[(idx+1)%3];</span>
+<span class="fc" id="L88">                newCoords[2]=((SquareBoard)boards[2]).getdim_y()+localCoords[idx];</span>
+                // System.out.println(&quot;New Cooords&quot; + Arrays.toString(newCoords) );
+<span class="fc" id="L90">                return this.getField(newCoords);</span>
+            }
+            
+        }
+<span class="fc" id="L94">        return null;</span>
+    }
+
+    @Override
+    public void endGame(String str) {
+        // TODO Auto-generated method stub
+<span class="nc" id="L100">        throw new UnsupportedOperationException(&quot;Unimplemented method 'endGame'&quot;);</span>
+    }
+
+    @Override
+    public boolean validCoordinates(int[] globalCoords) {
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        if(globalCoords[0] == 3) {</span>
+            //Triangle Board
+<span class="fc" id="L107">            int [] localCoords = Arrays.copyOfRange(globalCoords, 1, globalCoords.length);</span>
+<span class="fc" id="L108">            return boards[3].validCoordinates(localCoords);</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        } else if(globalCoords.length == 3){</span>
+            // Square Board
+<span class="fc" id="L111">            int[] localCoords = Arrays.copyOfRange(globalCoords, 1, globalCoords.length);</span>
+<span class="fc" id="L112">            return ((SquareBoard)boards[globalCoords[0]]).validCoordinates(localCoords);</span>
+        } else {
+<span class="nc" id="L114">            return false;</span>
+        }
+    }
+    /* 
+    @Override
+    public void getHighlightedFields(ArrayList&lt;int[]&gt; coordList, ArrayList&lt;String&gt; fieldType){
+        System.out.println(&quot;Request Received in Abstract Game!&quot;);
+        if(!pieceIsSelected()){System.out.println(&quot;No Piece is selected, returning!&quot;); return;}
+        System.out.println(&quot;A Piece is selected to get highlighted Fields!&quot;);
+        coordList.add(selectedPiece.getGlobalCoordinates());
+        System.out.println(&quot;Coordinates of selected piece: &quot; + coordList.getFirst().toString());
+        fieldType.add(&quot;a&quot;);
+        System.out.println(&quot;Iterating Fields ...&quot;);
+        for(AbstractField field: selectedPiece.validMoves()){
+            System.out.println(&quot;Getting Valid Coordinates&quot;);
+            coordList.add(field.getGlobalCoordinates());
+            fieldType.add(&quot;p&quot;);
+            System.out.println(&quot;Adding possible Move: &quot; + coordList.getLast().toString());
+        }
+        System.out.println(&quot;Completed Iterating!&quot;);
+        
+    }
+    */
+
+
+    /*
+     * Check if clicked Field is a promotion field to request more information from user.
+     */
+    @Override
+    public boolean isPromotionField(int[] globalCoords) {
+        
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        if(globalCoords[0]&lt;3) {</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">            if(((SquareBoard)boards[globalCoords[0]]).isPromotionRow(globalCoords[2])) {</span>
+<span class="nc bnc" id="L147" title="All 4 branches missed.">                switch (this.getActivePlayer().playerID) {</span>
+                    case PID1:
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                        if(globalCoords[0] != 1)return true;</span>
+                        break;
+                    case PID2:
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                        if(globalCoords[0] != 2)return true;</span>
+                        break;
+                    case PID3:
+<span class="nc bnc" id="L155" title="All 2 branches missed.">                        if(globalCoords[0] != 3)return true;</span>
+                        break;
+                    default:
+                        break;
+                }
+<span class="nc" id="L160">                return false;</span>
+            }
+        }
+<span class="fc" id="L163">        return false;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

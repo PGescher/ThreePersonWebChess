@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>triangleVector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBoot backend</a> &gt; <a href="index.source.html" class="el_package">com.webapp.jchess.model.gamestate</a> &gt; <span class="el_source">triangleVector.java</span></div><h1>triangleVector.java</h1><pre class="source lang-java linenums">package com.webapp.jchess.model.gamestate;
+
+
+
+public class triangleVector extends abstractVector{
+    
+
+    public int Up_X;
+    public int Up_Y;
+    public int Up_Z;
+
+    public int Down_X;
+    public int Down_Y;
+    public int Down_Z;
+    
+
+    public triangleVector(int _xUP, int _yUP, int _zUP, int _xDOWN, int _yDOWN, int _zDOWN, int _maxSteps, takeEnemyPiece _takeEnemy){
+        
+<span class="fc" id="L19">        super(_maxSteps,_takeEnemy);</span>
+
+<span class="fc" id="L21">        this.Up_X=_xUP;</span>
+<span class="fc" id="L22">        this.Up_Y=_yUP;</span>
+<span class="fc" id="L23">        this.Up_Z = _zUP;</span>
+
+<span class="fc" id="L25">        this.Down_X=_xDOWN;</span>
+<span class="fc" id="L26">        this.Down_Y=_yDOWN;</span>
+<span class="fc" id="L27">        this.Down_Z=_zDOWN;</span>
+<span class="fc" id="L28">    }</span>
+
+    public triangleVector invert(){
+<span class="fc" id="L31">        return new triangleVector(-Down_X, -Down_Y, -Down_Z, -Up_X, -Up_Y, -Up_Z, maxSteps, takeEnemy);</span>
+    }
+
+    //Allow for special moves like casteling, en passant, ...
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

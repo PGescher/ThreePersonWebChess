@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>King.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBoot backend</a> &gt; <a href="index.source.html" class="el_package">com.webapp.jchess.model.pieces</a> &gt; <span class="el_source">King.java</span></div><h1>King.java</h1><pre class="source lang-java linenums">package com.webapp.jchess.model.pieces;
+
+import com.webapp.jchess.model.AbstractGame;
+import com.webapp.jchess.model.Player;
+import com.webapp.jchess.model.gamestate.*;
+import com.webapp.jchess.model.gamestate.abstractVector.takeEnemyPiece;
+
+import java.util.ArrayList;
+
+public class King extends Piece
+{
+    
+    //public boolean checked  = false;
+
+    public King(AbstractGame game, Player player)
+    {
+<span class="fc" id="L17">        super(game, player, Piece.typesOfPieces.King);</span>
+<span class="fc" id="L18">        this.symbol=&quot;K&quot;;</span>
+        
+<span class="fc" id="L20">        this.movementOptions.add(new squareVector(1,1,1,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L21">        this.movementOptions.add(new squareVector(1,-1,1,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L22">        this.movementOptions.add(new squareVector(-1,1,1,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L23">        this.movementOptions.add(new squareVector(-1,-1,1,takeEnemyPiece.POSSIBLE));</span>
+
+<span class="fc" id="L25">        this.movementOptions.add(new squareVector(1,0,1,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L26">        this.movementOptions.add(new squareVector(-1,0,1,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L27">        this.movementOptions.add(new squareVector(0,1,1,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L28">        this.movementOptions.add(new squareVector(0,-1,1,takeEnemyPiece.POSSIBLE));</span>
+
+        //Triangle horizontal and vertical
+<span class="fc" id="L31">        triangleVector triVec = new triangleVector(0,0,1,-1,0,0,1,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L32">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L33">        this.movementOptions.add(triVec.invert());</span>
+
+<span class="fc" id="L35">        triVec = new triangleVector(0,1,0,-1,0,0,1,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L36">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L37">        this.movementOptions.add(triVec.invert());</span>
+
+<span class="fc" id="L39">        triVec = new triangleVector(0,1,0,0,0,-1,1,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L40">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L41">        this.movementOptions.add(triVec.invert());</span>
+
+        //Triangle diagonal
+<span class="fc" id="L44">        triVec = new triangleVector(-1,1,1,-1,0,0,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L45">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L46">        this.movementOptions.add(triVec.invert());</span>
+
+<span class="fc" id="L48">        triVec = new triangleVector(0,0,1,1,1,0,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L49">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L50">        this.movementOptions.add(triVec.invert());</span>
+
+<span class="fc" id="L52">        triVec = new triangleVector(0,1,0,-1,1,-1,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L53">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L54">        this.movementOptions.add(triVec.invert());</span>
+<span class="fc" id="L55">    }</span>
+
+    //Is the King at its current position threatened by an enemy piece?
+    public boolean isCurrentlyChecked()
+    {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        for(Piece p: this.game.activePieces){</span>
+<span class="pc bpc" id="L61" title="1 of 4 branches missed.">            if(p.player==this.player || p.field == null) {continue;}</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">            if(p.possibleMoves().contains(this.field)) {return true;}</span>
+<span class="fc" id="L63">        }</span>
+<span class="fc" id="L64">        return false;</span>
+    }
+
+    /** Method to check is the king is checked or stalemated
+     *  @return int 0 if nothing, 1 if checkmate, else returns 2
+     */
+    public int isCheckmatedOrStalemated()
+    {
+        //Get all valid moves of our own pieces.
+        //If we can Move, we`re fine
+<span class="fc" id="L74">        ArrayList&lt;Piece&gt; tmpPieces = new ArrayList&lt;&gt;(game.activePieces);</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        for(Piece p: tmpPieces){</span>
+<span class="fc bfc" id="L76" title="All 4 branches covered.">            if(p.player==this.player &amp;&amp; p.validMoves().size()&gt;0) return 0;</span>
+<span class="fc" id="L77">        }</span>
+
+        // If we cant move and are checked, we lost
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (this.isCurrentlyChecked()){</span>
+<span class="nc" id="L81">            return 1;</span>
+        }
+        else{
+<span class="nc" id="L84">            return 2;</span>
+        }
+        
+    }
+    
+    //Test if moving our piece would threaten the safety of our king.
+    public boolean willBeSafeAfterMove(AbstractField start, AbstractField targetSquare){
+
+        //Only if piece was at target square
+<span class="fc" id="L93">        Piece tmp = null;</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if(targetSquare.piece!=null){</span>
+<span class="nc" id="L95">            tmp = targetSquare.piece;</span>
+<span class="nc" id="L96">            tmp.field = null;</span>
+<span class="nc" id="L97">            game.activePieces.remove(tmp);</span>
+        }
+
+        //Main part is always relevant
+<span class="fc" id="L101">        targetSquare.piece = start.piece; // move without redraw</span>
+<span class="fc" id="L102">        targetSquare.piece.field = targetSquare;</span>
+<span class="fc" id="L103">        start.piece = null;</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        boolean ret = !this.isCurrentlyChecked();</span>
+<span class="fc" id="L105">        start.piece = targetSquare.piece;</span>
+<span class="fc" id="L106">        start.piece.field = start;</span>
+<span class="fc" id="L107">        targetSquare.piece = null;</span>
+
+        //Only if piece was at target square
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if(tmp!=null){</span>
+<span class="nc" id="L111">        targetSquare.piece = tmp;</span>
+<span class="nc" id="L112">        tmp.field = targetSquare;</span>
+<span class="nc" id="L113">        game.activePieces.add(tmp);</span>
+        }
+<span class="fc" id="L115">        return ret;</span>
+    }
+
+    /*
+    @Override
+    public void specialMoves(ArrayList&lt;AbstractField&gt; validMoves){
+        if(this.wasMoved)return;
+
+        int shortX = this.field.coords[0]+3;
+        int shortY = this.field.coords[1];
+        int[] shortCoords = new int[]{shortX,shortY};
+        if(game.validCoordinates(shortCoords)
+            &amp;&amp;!game.getField(shortCoords).piece.wasMoved){
+            movementVector specialMove = new movementVector(2,0,1,movementVector.takeEnemyPiece.IMPOSSIBLE);
+            recursiveDirectionCheck(validMoves, this, this.field, specialMove,0);
+        }
+
+        int longX = this.field.coords[0]-4;
+        int longY = this.field.coords[1];
+        int [] longCoords = new int[]{longX,longY};
+        if(game.validCoordinates(longCoords)&amp;&amp;!game.getField(longCoords).piece.wasMoved){
+            movementVector specialMove = new movementVector(-2,0,1,movementVector.takeEnemyPiece.IMPOSSIBLE);
+            recursiveDirectionCheck(validMoves, this, this.field, specialMove,0);
+        }
+    }
+    */
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

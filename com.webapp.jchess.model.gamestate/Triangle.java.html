@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Triangle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBoot backend</a> &gt; <a href="index.source.html" class="el_package">com.webapp.jchess.model.gamestate</a> &gt; <span class="el_source">Triangle.java</span></div><h1>Triangle.java</h1><pre class="source lang-java linenums">package com.webapp.jchess.model.gamestate;
+// import java.util.Arrays;
+
+import com.webapp.jchess.model.pieces.Piece;
+
+/**
+ * Class to represent a chessboard square
+ */
+public class Triangle extends AbstractField
+{
+    boolean upright;
+
+    Triangle(int boardIdx, int pozX, int pozY,int pozZ, Piece piece, AbstractBoard board, boolean _upright)
+    {
+<span class="fc" id="L15">        super(piece, board);</span>
+<span class="fc" id="L16">        this.localCoords = new int[]{pozX, pozY, pozZ};</span>
+<span class="fc" id="L17">        this.globalCoords = new int[]{boardIdx,pozX, pozY, pozZ};</span>
+<span class="fc" id="L18">        this.upright = _upright;</span>
+<span class="fc" id="L19">    }/*--endOf-Triangle--*/</span>
+
+
+    Triangle(Triangle _triangle)
+    {
+<span class="nc" id="L24">        super(_triangle.piece, _triangle.board);</span>
+<span class="nc" id="L25">        this.localCoords = _triangle.localCoords;</span>
+<span class="nc" id="L26">        this.globalCoords = _triangle.globalCoords;</span>
+<span class="nc" id="L27">        this.upright = _triangle.upright;</span>
+<span class="nc" id="L28">    }</span>
+
+    public Triangle clone(Triangle triangle)
+    {
+<span class="nc" id="L32">        return new Triangle(triangle);</span>
+    }
+
+
+    @Override
+    public AbstractBoard getBoard() {
+<span class="nc" id="L38">        return (TriangleBoard)board;</span>
+    }
+
+    @Override
+    public int[] addVec(abstractVector vec){
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if(!(vec instanceof triangleVector))return null;</span>
+<span class="fc" id="L44">        triangleVector triVec = (triangleVector)vec;</span>
+<span class="fc" id="L45">        int[] retCoords = new int[]{</span>
+<span class="fc" id="L46">            this.getGlobalCoords()[0],</span>
+<span class="fc" id="L47">            this.getGlobalCoords()[1],</span>
+<span class="fc" id="L48">            this.getGlobalCoords()[2],</span>
+<span class="fc" id="L49">            this.getGlobalCoords()[3]};</span>
+        
+        // System.out.println(&quot;### TriCoords upright: &quot;+this.upright+&quot; before: &quot; + Arrays.toString(retCoords));
+        
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if(this.upright){</span>
+<span class="nc" id="L54">            retCoords[1]+= triVec.Up_X;</span>
+<span class="nc" id="L55">            retCoords[2]+= triVec.Up_Y;</span>
+<span class="nc" id="L56">            retCoords[3]+= triVec.Up_Z;</span>
+        }else{
+<span class="fc" id="L58">            retCoords[1]+= triVec.Down_X;</span>
+<span class="fc" id="L59">            retCoords[2]+= triVec.Down_Y;</span>
+<span class="fc" id="L60">            retCoords[3]+= triVec.Down_Z;</span>
+        }
+
+        // System.out.println(&quot;TriCoords after: &quot; + Arrays.toString(retCoords));
+
+<span class="fc" id="L65">        return retCoords;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Bishop.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBoot backend</a> &gt; <a href="index.source.html" class="el_package">com.webapp.jchess.model.pieces</a> &gt; <span class="el_source">Bishop.java</span></div><h1>Bishop.java</h1><pre class="source lang-java linenums">package com.webapp.jchess.model.pieces;
+
+import com.webapp.jchess.model.AbstractGame;
+import com.webapp.jchess.model.Player;
+import com.webapp.jchess.model.gamestate.abstractVector.takeEnemyPiece;
+import com.webapp.jchess.model.gamestate.squareVector;
+import com.webapp.jchess.model.gamestate.triangleVector;
+
+public class Bishop extends Piece 
+{
+
+    public Bishop(AbstractGame game, Player player)
+    {
+<span class="fc" id="L14">        super(game, player, Piece.typesOfPieces.Bishop);      //call initializer of super type: Piece</span>
+<span class="fc" id="L15">        this.symbol = &quot;B&quot;;</span>
+
+<span class="fc" id="L17">        this.movementOptions.add(new squareVector(1,1,7,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L18">        this.movementOptions.add(new squareVector(1,-1,7,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L19">        this.movementOptions.add(new squareVector(-1,1,7,takeEnemyPiece.POSSIBLE));</span>
+<span class="fc" id="L20">        this.movementOptions.add(new squareVector(-1,-1,7,takeEnemyPiece.POSSIBLE));</span>
+
+<span class="fc" id="L22">        triangleVector triVec = new triangleVector(-1,1,1,-1,0,0,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L23">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L24">        this.movementOptions.add(triVec.invert());</span>
+
+<span class="fc" id="L26">        triVec = new triangleVector(0,0,1,1,1,0,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L27">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L28">        this.movementOptions.add(triVec.invert());</span>
+
+<span class="fc" id="L30">        triVec = new triangleVector(0,1,0,-1,1,-1,15,takeEnemyPiece.POSSIBLE);</span>
+<span class="fc" id="L31">        this.movementOptions.add(triVec);</span>
+<span class="fc" id="L32">        this.movementOptions.add(triVec.invert());</span>
+<span class="fc" id="L33">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

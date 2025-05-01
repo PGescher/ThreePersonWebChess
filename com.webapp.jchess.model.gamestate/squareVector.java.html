@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>squareVector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBoot backend</a> &gt; <a href="index.source.html" class="el_package">com.webapp.jchess.model.gamestate</a> &gt; <span class="el_source">squareVector.java</span></div><h1>squareVector.java</h1><pre class="source lang-java linenums">package com.webapp.jchess.model.gamestate;
+
+
+public class squareVector extends abstractVector{
+
+    public int movementVector_X;
+    public int movementVector_Y;
+
+    public squareVector(int _x, int _y , int _maxSteps, takeEnemyPiece _takeEnemy){
+<span class="fc" id="L10">        super(_maxSteps,_takeEnemy);</span>
+        
+<span class="fc" id="L12">        this.movementVector_X=_x;</span>
+<span class="fc" id="L13">        this.movementVector_Y=_y;</span>
+
+<span class="fc" id="L15">    }</span>
+
+    //Allow for special moves like casteling, en passant, ...
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
